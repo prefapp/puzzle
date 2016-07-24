@@ -1,0 +1,19 @@
+arquitecto:
+  restart: always
+  image: registry.prefapp.in:5000/prefapp/arquitecto
+  container_name: arquitecto
+  working_dir: /home/prefapp/prefapp-arquitecto
+  external_links: 
+    - mongo:mongo
+  command: /root/start.sh
+  environment:
+    - RUTA_BASE=/opt/arquitecto
+    - RUTA_PLANOS=/opt/arquitecto/planos
+    - NOMBRE_BBDD=/opt/arquitecto/bbdd.sqlite
+    - URL_RIYIC=http://prefapp02.cloudapp.net:32768/api/v1 
+    - USERNAME=arquitecto@prefapp.in 
+    - TOKEN=c46b39673287587a71fc213109349cc6c5dc60bd00c9f0603f6 
+    - LOGS=1 
+    - RUTA_LOG_GENERAL=/opt/arquitecto/log_general.log
+    - DATOS_MONGO__HOST=mongo
+

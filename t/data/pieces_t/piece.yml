@@ -1,0 +1,10 @@
+origin: compose.yml
+
+exports:
+  foo: 
+    a: 1
+
+related: 
+  foo2:
+    b: 1
+

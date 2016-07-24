@@ -1,0 +1,6 @@
+Revision history for Perl extension PrefApp::Puzzle.
+
+0.01  Sat Jul 23 17:09:54 2016
+	- original version; created by h2xs 1.23 with options
+		-AX PrefApp::Puzzle
+
