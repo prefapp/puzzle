@@ -1,0 +1,9 @@
+arquitecto:
+  restart: always
+  image: prefapp/arquitecto
+  container_name: arquitecto
+  working_dir: /home/prefapp/prefapp-arquitecto
+  external_links: []
+  command: /root/start.sh
+  environment: {}
+

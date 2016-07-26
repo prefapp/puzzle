@@ -5,6 +5,8 @@ use Eixo::Base::Clase 'PrefApp::Puzzle::Entity';
 
 has(
 
+    path=>undef,
+
     referer=>undef,
 
     data=>{},
@@ -25,5 +27,21 @@ sub extends :Sig(self, s){
     $e && $e->{file};
 }
 
+sub getExtendedComposes{
+    my ($self) = @_;
+
+    return map {
+        
+        $_->compose_base, 
+
+        $_->compose_base->getExtendedComposes()
+    }
+    grep {
+
+        $_->compose_base
+
+    } values(%{$self->constructions})
+
+}
 
 1;

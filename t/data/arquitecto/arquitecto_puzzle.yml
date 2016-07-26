@@ -1,0 +1,48 @@
+#
+# API
+# 
+arquitecto:
+  container_name: arquitecto
+  extends: 
+    file: arquitecto_base_puzzle.yml
+    service: arquitecto
+  ports:
+    - 6000:5000
+  volumes_from:
+    - data
+  command: plackup bin/start_api.psgi
+  
+  environment: {}
+
+  external_links:
+    - mysql:mysql
+
+#
+# MINIONS
+#
+arquitecto_minions:
+
+  container_name: arquitecto_minions
+
+  extends:
+ 
+    file: arquitecto_base_puzzle.yml
+
+    service: arquitecto
+  volumes_from: 
+    - data
+  command: tarea start_minions foreground=1
+  environment: {}
+
+  external_links:
+    - mysql:mysql
+
+
+#
+# data container
+#
+data:
+  image: busybox 
+  container_name: arquitecto_data
+  volumes:
+    - /opt/arquitecto

@@ -1,6 +1,6 @@
 origin: compose.yml
 
-weight: 0
+weight: 3
 
 exports:
   foo: 

@@ -1,0 +1,48 @@
+origin: "arquitecto/arquitecto_puzzle.yml"
+
+contenedores_aplicacion: ["arquitecto", "arquitecto_minions"]
+
+weight: 4
+
+exports:
+
+  "arquitecto + arquitecto_minions": 
+
+    NOMBRE_BBDD: "arquitecto_bd"
+    USER_BBDD: "arquitecto_user"
+    PASSWORD_BBDD: "lJQiCN4tjNMf7QUHAanIiQ"
+    HOST_BBDD: "mysql"
+    DRIVER_BBDD: "mysql"
+    URL_RIYIC: "http://riyic.com/api/v1"
+    USERNAME: 'arquitecto_pre@prefapp.in'
+    TOKEN: "821bffc0322ee6f60fb6f354ed6a0e97c72360ea"
+    LOGS_GELF: 0
+    PREFABRICAR_BLUEPRINTS: 0
+    URL_FABRICADOR: ""
+
+  arquitecto_minions: 
+    MINIONS_NUMERO: 1
+
+related:
+
+  "gpac + gpac_minions":
+    
+    ARQUITECTO_DE_CARTON: 0
+    
+    URL_ARQUITECTO: "http://172.17.0.1:6000"
+
+tareas:
+
+  instalar: 
+    - 
+      contenedor: "arquitecto"
+      tareas: 
+        - "tarea instalar ruta_apps=https://github.com/prefapp/planos/archive/master.zip"
+        - "tarea migrar_bd"
+
+  actualizar:
+    -
+      contenedor: "arquitecto"
+      tareas:
+        - "tarea migrar_bd"
+        - "tarea insertar_apps ruta_apps=https://github.com/prefapp/planos/archive/master.zip"

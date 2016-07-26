@@ -3,6 +3,7 @@ package PrefApp::Puzzle::LoaderCompose;
 use strict;
 use Eixo::Base::Clase 'PrefApp::Puzzle::Loader';
 
+use File::Basename qw(fileparse);
 use PrefApp::Puzzle::Compose;
 
 use YAML qw(Load);
@@ -27,6 +28,8 @@ sub __load{
 
         data=>$data,
 
+        path=>$self->__calculateComposePath($name),
+
         %args
 
     );
@@ -34,7 +37,7 @@ sub __load{
     # we load the constructions
     $compose->constructions(
 
-        $self->__loadConstructions($compose)
+        $self->__loadConstructions($compose, $name)
 
     );
 
@@ -48,20 +51,30 @@ sub __load{
 
             $self->__slurp(
 
-                join(
-
-                    "/",
-
-                    $_[0]->basePath,
-
-                    $name
-                )
+                $self->__calculateComposePath($name)
            ) 
         )
     }
 
+    sub __calculateComposePath{
+        my ($self, $name) = @_;
+
+        join(
+
+            "/",
+
+            $self->basePath,
+    
+            $name
+
+        )
+    
+    }
+
     sub __loadConstructions{
-        my ($self, $compose) = @_;
+        my ($self, $compose, $path) = @_;
+
+        my ($f, $relativePath) = fileparse($path);
 
         my %constructions = map {
 
@@ -78,7 +91,9 @@ sub __load{
 
                 referer=>$compose->alias,
 
-                data=>$compose->data->{$_}
+                data=>$compose->data->{$_},
+
+                path=>$relativePath
             )
             
 

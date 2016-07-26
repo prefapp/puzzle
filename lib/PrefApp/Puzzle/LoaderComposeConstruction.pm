@@ -27,7 +27,7 @@ sub __load{
 
     );
 
-    my ($compose, $base_service) = $self->__loadBaseCompose($construction);
+    my ($compose, $base_service) = $self->__loadBaseCompose($construction, $args{path});
 
     if($compose){
         $construction->compose_base($compose);
@@ -37,13 +37,16 @@ sub __load{
 }
 
     sub __loadBaseCompose{
-        my ($self, $construction) = @_;
+        my ($self, $construction, $relativePath) = @_;
 
         return undef unless($construction->data->{extends});
 
         my $file = $construction->data->{extends}->{file};
         my $as = $construction->data->{extends}->{service};
 
+      
+        $file = $relativePath . "/" . $file if($relativePath);
+        
         return ($self->loader(
 
             $self->LOADER_COMPOSE_CLASS,
@@ -59,5 +62,6 @@ sub __load{
         ), $as);
         
     }
+    
 
 1;

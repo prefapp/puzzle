@@ -5,6 +5,8 @@ use Eixo::Base::Clase 'PrefApp::Puzzle::Entity';
 
 has(
 
+    path=>undef,
+
     name=>undef,
 
     data=>undef,

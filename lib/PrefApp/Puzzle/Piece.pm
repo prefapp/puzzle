@@ -26,5 +26,4 @@ sub related{
     $_[0]->data->{related} || {};
 }
 
-
 1;

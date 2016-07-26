@@ -1,0 +1,9 @@
+origin: compose.yml
+
+weight: 1
+
+exports: {}
+
+related: 
+  "foo + foo2":
+    valor: "b"

@@ -3,6 +3,7 @@ package PrefApp::Puzzle::Loader;
 use strict;
 use Eixo::Base::Clase 'PrefApp::Puzzle::Base';
 
+use PrefApp::Puzzle::LoaderPiece;
 use PrefApp::Puzzle::LoaderCompose;
 use PrefApp::Puzzle::LoaderComposeConstruction;
 
@@ -12,6 +13,10 @@ sub LOADER_COMPOSE_CLASS{
 
 sub LOADER_COMPOSE_CONSTRUCTION_CLASS{
     "PrefApp::Puzzle::LoaderComposeConstruction"
+}
+
+sub LOADER_PIECE_CLASS{
+    "PrefApp::Puzzle::LoaderPiece"
 }
 
 has(
@@ -29,6 +34,14 @@ sub initialize{
 
 sub load{
     $_[0]->__load(@_[1..$#_]);
+}
+
+sub loaderPiece{
+    $_[0]->loader($_[0]->LOADER_PIECE_CLASS);
+}
+
+sub loaderCompose{
+    $_[0]->loader($_[0]->LOADER_COMPOSE_CLASS);
 }
 
 sub createEntity{
