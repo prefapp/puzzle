@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 use strict;
 use Getopt::Long;
 
@@ -11,3 +12,5 @@ PrefApp::Puzzle::Main->new(
     argv=>\@ARGV
 
 )->run($command, @args);
+
+
