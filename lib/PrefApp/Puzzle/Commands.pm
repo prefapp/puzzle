@@ -47,6 +47,9 @@ sub initialize{
 
     );
 
+    # we have to load the pieces
+    $_[0]->c__loadPieces;
+
 
     # is there a compilation?
     if(-d $_[0]->env->puzzle_compilation_path){
@@ -70,9 +73,6 @@ sub initialize{
             refCompilation=>$_[0]->compilation
         )
     );
-
-    # we have to load the pieces
-    $_[0]->c__loadPieces;
 
     $_[0];
 }
@@ -105,14 +105,15 @@ sub up{
     else{
         foreach(@services_list){
 
-            if($self->c__isServiceInstalled($_)){
+            if(!$self->c__isServiceInstalled($_)){
 
                 $self->error("The service $_ is not installed, we cannot up a service not installed in a working compilation");                
 
             }
         }
 
-        $self->c__recompileService($_) foreach(@services_list);
+        $self->c__recompileService($_) foreach(grep { $self->c__isServiceInstalled($_)} @services_list);
+        $self->c__compileService($_) foreach(grep { !$self->c__isServiceInstalled($_)} @services_list);
     }
 
     return if(grep {$_ eq '--only-build'} @_);
@@ -131,7 +132,7 @@ sub down{
         $self->error("There is no working compilation");
     }
 
-    my @services_list = $self->c__installedServices(@services);
+    my @services_list = $self->c__listInstalledServices(@services);
 
     foreach my $service (reverse @services_list){
 
@@ -145,6 +146,9 @@ sub down{
 
         $self->info("Service $service is down");
     }
+
+    # if the compilation is empty we erase the parent directory
+    $self->c__deleteCompilation();
 }
 
 sub ps{
@@ -312,10 +316,13 @@ sub reset{
             path=>$self->env->puzzle_compilation_path,
 
             validServices=>[keys %{$self->validServices}],
+
         );
 
-        $self->serviceCompiler->refCompilation($c);
-    
+        if($self->serviceCompiler){
+            $self->serviceCompiler->refCompilation($c);
+        }       
+
         return $c;
     }
 
@@ -329,9 +336,27 @@ sub reset{
         );
     }
 
+    sub c__listInstalledServices{
+        my ($self, @list) = @_;
+
+        @list = (@list) ? @list : $self->c__listValidServices();
+
+        grep {
+            $self->c__isServiceInstalled($_);
+        } @list
+    }
+
     sub c__isServiceInstalled{
         my ($self, $service) = @_;
 
         $self->compilation->serviceInstalled($service);
+    }
+
+    sub c__deleteCompilation{
+        my ($self) = @_;
+
+        unless($self->c__listInstalledServices){
+            $self->compilation->destroy;
+        }
     }
 1;
