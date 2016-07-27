@@ -62,6 +62,14 @@ sub run{
 
     }
 
+    sub command_ps{
+        my ($self, @args) = @_;
+    
+        $self->__instantiateCommands->ps(
+            @args
+        );
+    }
+
 sub __instantiateCommands{
     
     PrefApp::Puzzle::Commands->new(

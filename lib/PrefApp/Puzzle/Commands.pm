@@ -173,7 +173,7 @@ sub ps{
         $self->error("There is no working compilation");
     }
 
-    my @services_list = $self->c_ordererListInstalledServices(@services);
+    my @services_list = $self->c__listInstalledServices(@services);
 
     foreach my $service (@services_list){
 

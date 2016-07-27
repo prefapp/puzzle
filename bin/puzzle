@@ -4,8 +4,17 @@ use Getopt::Long;
 
 use PrefApp::Puzzle::Main;
 
+
+sub help{
+    print join "", <DATA>;
+    exit 0;
+}
+
 my ($command, @args) = @ARGV;
 
+unless($command){
+    &help();
+}
 
 PrefApp::Puzzle::Main->new(
 
@@ -14,3 +23,14 @@ PrefApp::Puzzle::Main->new(
 )->run($command, @args);
 
 
+__DATA__
+
+Usage: puzzle COMMAND [arg...]
+
+Commands:
+
+    up      Launch one or more puzzle services
+    down    Stops and deletes installed puzzle services
+    ps      Information about installed puzzle services
+     
+    
