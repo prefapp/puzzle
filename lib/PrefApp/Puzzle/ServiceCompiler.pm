@@ -78,8 +78,15 @@ sub compile{
             if(grep {$_ eq $construction_name} @{$piece->getApplicationContainers}){
 
                 # We need a mount point
-                if(my $mount_point = $self->find($construction_name . '.working_dir'), $piece){
-                    $self->mountVolume($from . ':' . $mount_point);
+                if(my $mount_point = $self->__find($construction_name . '.working_dir', $piece)){
+                    
+                    $self->__mountVolume(
+
+                        $construction, 
+
+                        $from . ':' . $mount_point
+
+                    );
                 }
                 else{
                     $self->error("Construction $construction_name has not established a working_dir, ".
@@ -96,11 +103,19 @@ sub compile{
         $self->compose_data->{$construction_name} = $data;
     }
 
-    sub __find{
+    sub __mountVolume{
+        my ($self, $construction, $volume) = @_;
         
+        $construction->data->{volumes} ||= [];
+
+        push @{$construction->data->{volumes}}, $volume;
+    }
+
+    sub __find{
+
         PrefApp::Puzzle::AttributeFinder->new->find(
 
-            @_[1..$#_]
+            $_[1], $_[2]
 
         )
     }
