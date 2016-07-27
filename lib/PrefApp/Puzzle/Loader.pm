@@ -6,6 +6,8 @@ use Eixo::Base::Clase 'PrefApp::Puzzle::Base';
 use PrefApp::Puzzle::LoaderPiece;
 use PrefApp::Puzzle::LoaderCompose;
 use PrefApp::Puzzle::LoaderComposeConstruction;
+use PrefApp::Puzzle::LoaderPieceTasks;
+
 
 sub LOADER_COMPOSE_CLASS{
     "PrefApp::Puzzle::LoaderCompose";
@@ -17,6 +19,10 @@ sub LOADER_COMPOSE_CONSTRUCTION_CLASS{
 
 sub LOADER_PIECE_CLASS{
     "PrefApp::Puzzle::LoaderPiece"
+}
+
+sub LOADER_PIECE_TASKS_CLASS{
+    "PrefApp::Puzzle::LoaderPieceTasks";
 }
 
 has(

@@ -8,6 +8,8 @@ has(
     data=>{},
 
     compose=>undef,
+
+    tasks=>undef,
 );
 
 sub BUILD_ALIAS{
@@ -28,6 +30,12 @@ sub exports{
 
 sub related{
     $_[0]->data->{related} || {};
+}
+
+sub getTasksFor :Sig(self, s){ 
+    my ($self, $label) = @_;
+
+    $self->tasks->{$label};
 }
 
 1;

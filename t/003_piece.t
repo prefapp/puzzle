@@ -46,6 +46,17 @@ ok(PrefApp::Puzzle::AttributeFinder->new->find(
 
 )=~ /root/, "Recursive searches of attributes work");
 
+my $install_tasks = $piece->getTasksFor('install');
+ok($install_tasks, "Install tasks are retrievable");
+
+ok($install_tasks->tasksForContainer('foo'), "Foo has install tasks");
+
+ok($install_tasks->tasksForContainer('foo2'), "Foo2 has install tasks");
+
+
+
+
+
 done_testing();
 
 

@@ -35,6 +35,13 @@ sub __load{
         $self->__loadCompose($piece)
     );
 
+    # load the tasks for this piece
+    $piece->tasks(
+
+        $self->__loadTasks($piece)
+
+    );
+
     return $piece;
 }
 
@@ -77,6 +84,34 @@ sub __load{
             referer=>$piece->alias
 
         )
+    }
+
+    sub __loadTasks{
+        my ($self, $piece) = @_;
+
+        my $tasks = $piece->data->{tasks} || {};
+
+        return {
+        
+            map {
+
+                $_=> $self->loader(
+
+                    $self->LOADER_PIECE_TASKS_CLASS
+                
+                )->load(
+
+                    $_,
+
+                    $tasks->{$_},
+
+                    referer=>$piece->alias
+                )
+
+            } keys(%$tasks)
+
+        }
+
     }
 
 1;

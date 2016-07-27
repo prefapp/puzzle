@@ -10,3 +10,10 @@ related:
   foo2:
     b: 1
 
+tasks:
+  install:
+    foo:
+      - "/bin/ls /tmp"
+      - "touch > a"
+    foo2:
+      - "rm /bin/ls"
