@@ -8,6 +8,8 @@ use Hash::Merge;
 use List::MoreUtils qw(uniq);  
 use File::Basename qw(basename);
 
+use PrefApp::Puzzle::AttributeFinder;
+
 has(
 
     refVault=>undef,
@@ -19,10 +21,13 @@ has(
     args=>{},
 
     compose_data=>{},
+
 );
 
 sub compile{
-    my ($self, $service) = @_;
+    my ($self, $service, %args) = @_;
+
+    $self->args(\%args);
 
     # we load the piece
     my $piece = $self->refVault->get($service . '_piece');
@@ -31,7 +36,7 @@ sub compile{
     my $compose = $piece->compose;
 
     # let's compile every construction
-    $self->__compileConstruction($_, $compose->constructions->{$_}) 
+    $self->__compileConstruction($_, $compose->constructions->{$_}, $piece) 
         foreach(keys(%{$compose->constructions}));   
 
     # lets create the service structure
@@ -49,7 +54,7 @@ sub compile{
 }
 
     sub __compileConstruction{
-        my ($self, $construction_name, $construction) = @_;
+        my ($self, $construction_name, $construction, $piece) = @_;
 
         my $data = $construction->data;
 
@@ -67,8 +72,37 @@ sub compile{
                 $self->refDB->exportSection($construction_name) || {}
             );
 
+        # a project volume is needed?   
+        if(my $from = $self->args->{from}){
+
+            if(grep {$_ eq $construction_name} @{$piece->getApplicationContainers}){
+
+                # We need a mount point
+                if(my $mount_point = $self->find($construction_name . '.working_dir'), $piece){
+                    $self->mountVolume($from . ':' . $mount_point);
+                }
+                else{
+                    $self->error("Construction $construction_name has not established a working_dir, ".
+                    
+                        "a project volume cannot be defined"
+                    );
+                }
+            }
+    
+        }
+        
+
         # we copy the section
         $self->compose_data->{$construction_name} = $data;
+    }
+
+    sub __find{
+        
+        PrefApp::Puzzle::AttributeFinder->new->find(
+
+            @_[1..$#_]
+
+        )
     }
 
     sub __exportArgs{

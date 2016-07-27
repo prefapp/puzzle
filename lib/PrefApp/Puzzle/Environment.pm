@@ -31,14 +31,22 @@ sub initialize{
     
     my $original = $_[0]->__loadData();    
 
+    my $env_data = $_[0]->__loadEnvData($original);
+
+
     my $merge_data = Hash::Merge->new('RIGHT_PRECEDENT')->merge(
 
         $original,
 
-        \%data
+        $env_data,
     );
 
-    my $env_data = $_[0]->__loadEnvData($merge_data);
+    # we don't need undefined environment values
+    %data = map { 
+                $_ => $data{$_} 
+            } grep { 
+                defined($data{$_})
+            } keys(%data);
 
     return $class->SUPER::initialize(
 
@@ -47,7 +55,7 @@ sub initialize{
 
                 $merge_data,
 
-                $env_data
+                \%data
             )
         }
 

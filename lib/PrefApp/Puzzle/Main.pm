@@ -31,11 +31,25 @@ sub run{
 
         $self->__parseOpts(
             'from=s@',
+            'save=s'
         );
 
+        $self->opts->{from} = {
+
+            map {
+
+                my ($service, $volume) = split(/\:/, $_);
+            
+                $service=>$volume
+
+            } @{$_[0]->opts->{from} || []}
+        };
+
         $self->__instantiateCommands->up(
+
             @args
-        )
+
+        )->end;
         
     }
 
@@ -59,23 +73,30 @@ sub __parseOpts{
     my ($self, @opts) = @_;
 
     my %opts;
-    my $get_opts ={};
+    my %get_opts;
 
     foreach(@opts){
 
-        my ($key, $t) = split(/\=/, $_);
+        my ($key, $t);
+
+        if($_ =~ /\=/){ 
+            ($key, $t) = split(/\=/, $_);
+        }
+        else{
+            $key = $_;
+        }
 
         if($t =~ /\@/){
             $opts{$key} = [];
+            $get_opts{$_} = $opts{$key};
         }
         else{
-            $opts{$key} = '';
+            $get_opts{$_} = sub { $opts{$_[0]} = $_[1] };
         }
 
-        $get_opts->{$_} = $opts{$key};
     }
     
-    Getopt::Long::Parser->new->getoptionsfromarray($self->argv, %$get_opts);
+    Getopt::Long::Parser->new->getoptionsfromarray($self->argv, %get_opts);
 
     $self->opts(\%opts);
 

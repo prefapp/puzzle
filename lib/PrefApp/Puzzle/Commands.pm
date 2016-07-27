@@ -13,6 +13,8 @@ use PrefApp::Puzzle::ServiceCompiler;
 
 has(
 
+    opts=>{},
+
     env=>undef,
 
     db=>undef,
@@ -32,7 +34,12 @@ sub initialize{
 
     $_[0]->SUPER::initialize(@_[1..$#_]);
 
-    $_[0]->env(PrefApp::Puzzle::Environment->new);
+    $_[0]->env(PrefApp::Puzzle::Environment->new(
+
+        puzzle_compilation_path=>$_[0]->opts->{save}
+
+    ));
+
     $_[0]->db(PrefApp::Puzzle::Data->new);
     $_[0]->vault(PrefApp::Puzzle::Vault->new);
 
@@ -81,6 +88,12 @@ sub initialize{
 #
 # External commands
 #
+sub end{
+    my ($self) = @_;
+
+    $self->env->store;
+}
+
 sub up{
     my ($self, @services) = @_;
 
@@ -116,12 +129,14 @@ sub up{
         $self->c__compileService($_) foreach(grep { !$self->c__isServiceInstalled($_)} @services_list);
     }
 
-    return if(grep {$_ eq '--only-build'} @_);
+    return $self if(grep {$_ eq '--only-build'} @_);
 
     # we up the services
     foreach my $service (@services_list){
         $self->c__dockerForService($service)->up;
     }
+
+    $self;
 }
 
 
@@ -184,7 +199,7 @@ sub reset{
         my ($self) = @_;
 
         unless($self->env->puzzle_source_path){
-            $self->fatal("PUZZLE_SOURCE_PATH is not defined");
+            $self->error("PUZZLE_SOURCE_PATH is not defined");
         }
 
         # establish the valid services
@@ -331,7 +346,10 @@ sub reset{
 
         $self->serviceCompiler->compile(
 
-            $service
+            $service,
+    
+            from=>$self->opts->{from}->{$service}
+        
 
         );
     }
