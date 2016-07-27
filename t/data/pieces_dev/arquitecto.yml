@@ -1,6 +1,6 @@
 origin: "arquitecto/arquitecto_puzzle.yml"
 
-contenedores_aplicacion: ["arquitecto", "arquitecto_minions"]
+application_containers: ["arquitecto", "arquitecto_minions"]
 
 weight: 4
 
