@@ -1,6 +1,5 @@
 Changes
 Makefile.PL
 MANIFEST
-README
 t/PrefApp-Puzzle.t
 lib/PrefApp/Puzzle.pm
