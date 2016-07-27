@@ -348,8 +348,38 @@ sub reset{
 
             $service,
     
-            from=>$self->opts->{from}->{$service}
-        
+            $self->c__getArgsToCompilation($service)
+
+        );
+    }
+
+    sub c__recompileService{
+        my ($self, $service) = @_;
+
+        # we need to retrieve args from a service
+        my $args = $self->compilation->getServiceCompilationArgs($service);
+
+        # we destroy the original compilation of the service
+        $self->compilation->deleteService($service);
+
+        $self->serviceCompiler
+
+            ->args($args)
+
+            ->recompile(
+
+                $service,
+
+                $self->c__getArgsToCompilation($service)
+            )
+    }
+
+    sub c__getArgsToCompilation{
+        my ($self, $service) = @_;
+
+        return (
+
+            from => $self->opts->{from}->{$service}
 
         );
     }

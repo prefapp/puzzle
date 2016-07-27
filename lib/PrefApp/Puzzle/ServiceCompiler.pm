@@ -4,10 +4,12 @@ use strict;
 use Eixo::Base::Clase qw(PrefApp::Puzzle::Base);
 
 use YAML qw(Dump);
+use JSON::XS;
 use Hash::Merge;
 use List::MoreUtils qw(uniq);  
 use File::Basename qw(basename);
 
+use Hash::Merge;
 use PrefApp::Puzzle::AttributeFinder;
 
 has(
@@ -23,6 +25,25 @@ has(
     compose_data=>{},
 
 );
+
+sub recompile{
+    my ($self, $service, %args) = @_;
+
+    my $merged_args = Hash::Merge
+
+        ->new('RIGHT_PRECEDENT')
+
+        ->merge(
+
+            $self->args,
+
+            \%args
+        );
+
+
+    $self->compile($service, %$merged_args);
+    
+}
 
 sub compile{
     my ($self, $service, %args) = @_;
@@ -121,7 +142,7 @@ sub compile{
     }
 
     sub __exportArgs{
-        Dump($_[0]->args)
+        JSON::XS->new->encode($_[0]->args)
     }
 
     sub __dependencies{

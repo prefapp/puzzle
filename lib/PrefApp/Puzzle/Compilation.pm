@@ -4,6 +4,8 @@ use strict;
 use Eixo::Base::Clase 'PrefApp::Puzzle::Base';
 use File::Path qw(make_path remove_tree);
 
+use JSON::XS;
+
 has(
 
     path=>undef,
@@ -73,6 +75,28 @@ sub deleteService{
 
         "Service delete: error in remove_tree: " . $!
 
+    );
+}
+
+sub getServiceCompilationArgs :Sig(self, s){
+    my ($self, $service) = @_;
+
+    JSON::XS->new->decode(
+
+        $self->__getFile(
+
+            join(
+
+                "/",
+
+                $self->path,
+
+                $service,
+
+                "args"
+
+            )
+        )
     );
 }
 
@@ -164,4 +188,15 @@ sub __isServiceInstalled{
     } $_[0]->getServices
 
 }
+
+
+sub __getFile{
+
+    open F, $_[1];
+    my $d = join '', <F>;
+    close F;
+
+    return $d;
+}
+
 1;
