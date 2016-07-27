@@ -14,8 +14,7 @@ arquitecto:
   
   environment: {}
 
-  external_links:
-    - mysql:mysql
+  external_links: []
 
 #
 # MINIONS
@@ -34,8 +33,7 @@ arquitecto_minions:
   command: tarea start_minions foreground=1
   environment: {}
 
-  external_links:
-    - mysql:mysql
+  external_links: []
 
 
 #

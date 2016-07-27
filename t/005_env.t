@@ -29,8 +29,16 @@ eval{
 
     $env = PrefApp::Puzzle::Environment->new;
 
-    ok($env->puzzle_compilation_path eq "foo", "Environment value always takes precedence");
+    ok($env->puzzle_compilation_path eq "foo", "Environment value takes predecence over stored configuration");
 
+    $env = PrefApp::Puzzle::Environment->new(
+
+        puzzle_compilation_path=>"/home/foo"
+
+    );
+
+    ok($env->puzzle_compilation_path eq "/home/foo", "Opts values take predecence over everything else");
+    
     done_testing;
 
 };
