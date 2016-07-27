@@ -4,11 +4,16 @@ use strict;
 use Eixo::Base::Clase 'PrefApp::Puzzle::Loader';
 
 use PrefApp::Puzzle::Piece;
+use PrefApp::Puzzle::PieceEvent;
 
 use YAML qw(Load);
 
 sub PIECE_CLASS{
     "PrefApp::Puzzle::Piece";
+}
+
+sub PIECE_EVENT_CLASS{
+    "PrefApp::Puzzle::PieceEvent"
 }
 
 sub __load{
@@ -39,6 +44,13 @@ sub __load{
     $piece->tasks(
 
         $self->__loadTasks($piece)
+
+    );
+
+    # load the events for this piece
+    $piece->events(
+
+        $self->__loadEvents($piece)
 
     );
 
@@ -112,6 +124,32 @@ sub __load{
 
         }
 
+    }
+
+    sub __loadEvents{
+        my ($self, $piece) = @_;
+
+        my $events = $piece->data->{events} || {};
+
+        return {
+
+            map {
+
+                $_ => $self->createEntity(
+
+                    $self->PIECE_EVENT_CLASS,
+
+                    referer=>$piece->alias,
+
+                    name=>$_,
+
+                    tasks=>$events->{$_}
+
+                )
+
+            } keys(%$events)
+
+        };
     }
 
 1;

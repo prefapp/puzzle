@@ -53,7 +53,13 @@ ok($install_tasks->tasksForContainer('foo'), "Foo has install tasks");
 
 ok($install_tasks->tasksForContainer('foo2'), "Foo2 has install tasks");
 
+my @events_on_create = $piece->eventFired('on_create');
 
+ok($events_on_create[0] &&
+    $events_on_create[0]->label eq 'install', 
+
+    "Tasks for event on_create prepared"
+);
 
 
 

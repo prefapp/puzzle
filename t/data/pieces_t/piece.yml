@@ -10,6 +10,11 @@ related:
   foo2:
     b: 1
 
+events:
+  on_create:
+    - install
+  on_destroy: []
+
 tasks:
   install:
     foo:
@@ -17,3 +22,6 @@ tasks:
       - "touch > a"
     foo2:
       - "rm /bin/ls"
+  upate:
+     foo:
+      - "update database"

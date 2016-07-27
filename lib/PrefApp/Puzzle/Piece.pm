@@ -10,6 +10,8 @@ has(
     compose=>undef,
 
     tasks=>undef,
+
+    events=>{},
 );
 
 sub BUILD_ALIAS{
@@ -37,5 +39,18 @@ sub getTasksFor :Sig(self, s){
 
     $self->tasks->{$label};
 }
+
+sub eventFired:Sig(self, s){
+    my ($self, $event) = @_;
+
+    return () unless($self->events->{$event});
+
+    return map {
+
+        $self->getTasksFor($_)
+
+    } @{$self->events->{$event}->tasks}
+}
+
 
 1;
