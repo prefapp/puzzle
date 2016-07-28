@@ -29,8 +29,8 @@ Usage: puzzle COMMAND [arg...]
 
 Commands:
 
-    up      Launch one or more puzzle services
+    up      Launches one or more puzzle services
     down    Stops and deletes installed puzzle services
     ps      Information about installed puzzle services
-     
+    task    Runs a bunch of jobs in a service 
     

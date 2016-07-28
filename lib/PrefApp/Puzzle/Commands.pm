@@ -6,6 +6,7 @@ use Eixo::Base::Clase 'PrefApp::Puzzle::Base';
 use PrefApp::Puzzle::Data;
 use PrefApp::Puzzle::Vault;
 use PrefApp::Puzzle::Loader;
+use PrefApp::Puzzle::TaskRunner;
 use PrefApp::Puzzle::Compilation;
 use PrefApp::Puzzle::Environment;
 use PrefApp::Puzzle::DockerCompose;
@@ -112,6 +113,9 @@ sub up{
     
     my @services_list = $self->c__listValidServices(@services);
 
+    my @created_services;
+    my @upped_services;
+
     if($f_new){
         $self->c__compileService($_) foreach(@services_list);
     }
@@ -124,12 +128,20 @@ sub up{
 
             }
         }
+    
+        @created_services = grep { !$self->c__isServiceInstalled($_)} @services_list;
+        @upped_services = grep {$self->c__isServiceInstalled($_)} @services_list;
 
-        $self->c__recompileService($_) foreach(grep { $self->c__isServiceInstalled($_)} @services_list);
-        $self->c__compileService($_) foreach(grep { !$self->c__isServiceInstalled($_)} @services_list);
+        $self->c__compileService($_) foreach(@created_services);
+        $self->c__recompileService($_) foreach(@upped_services);
     }
 
     return $self if(grep {$_ eq '--only-build'} @_);
+
+    # for every created service we have to fire the event on_create
+    foreach my $service (@created_services){
+        $self->c__fireEventForService($service, 'on_create');
+    } 
 
     # we up the services
     foreach my $service (@services_list){
@@ -152,6 +164,9 @@ sub down{
     foreach my $service (reverse @services_list){
 
         $self->info("Down of service ", $service);
+
+        # fire event on_destroy
+        $self->c__fireEventForService($service, "on_destroy");
 
         # down
         $self->c__dockerForService($service)->down; 
@@ -180,6 +195,31 @@ sub ps{
         $self->info("Info: $service");
 
         $self->c__dockerForService($service)->ps;
+    }
+}
+
+sub task{
+    my ($self, $service, $task) = @_;
+
+    unless($self->c__isServiceInstalled($service)){
+        $self->error("$service is not installed");
+    }
+
+    $self->c__runTaskForService($service, $task);
+}
+
+sub taskList{
+    my ($self, $service) = @_;
+
+    unless($self->c__isServiceInstalled($service)){
+        $self->error("$service is not installed");
+    }
+
+    $self->info("Task list for service $service");
+
+    foreach my $tasks ($self->c__getPieceTasksLists($service)){
+
+        $self->info("\t", $tasks->label);
     }
 }
 
@@ -228,7 +268,7 @@ sub reset{
 
             $self->c__dbPiece(
 
-                $self->vault->get($v . '_piece')
+                $self->c__getPieceForService($v)
 
             );
 
@@ -406,5 +446,67 @@ sub reset{
         unless($self->c__listInstalledServices){
             $self->compilation->destroy;
         }
+    }
+
+
+    #
+    # Commands for events
+    #
+    sub c__fireEventForService{
+        my ($self, $service, $event) = @_;
+
+        my $runner = $self->c__runnerForService($service);
+
+        my @events = $self->c__getPieceForService(
+        
+            $service
+
+        )->eventFired($event);
+
+        $runner->runTasks($_) foreach(@events);
+    }
+
+
+    sub c__runTaskForService{
+        my ($self, $service, $task) = @_;
+
+        my $piece = $self->c__getPieceForService($service);
+
+        if(my $task_object = $piece->getTasksFor($task)){
+
+            $self->c__runTaskForService($service)->runTasks($task_object);
+
+        }
+        else{
+            $self->error("$service does not have a task labelled $task");
+        }
+    }
+
+    sub c__runnerForService{
+        my ($self, $service) = @_;
+
+        PrefApp::Puzzle::TaskRunner->new(
+
+            service=>$service,
+
+            dockerForService=>$self-c__dockerForService(
+
+                $service
+
+            )
+
+        );
+    }
+
+    sub c__getPieceForService{
+        my ($self, $service) = @_;
+
+        $self->vault->get($service . '_piece');
+    }
+
+    sub c__getPieceTasksLists{
+        my ($self, $service) = @_;
+
+        values %{$self->c__getPieceForService($service)->tasks}
     }
 1;

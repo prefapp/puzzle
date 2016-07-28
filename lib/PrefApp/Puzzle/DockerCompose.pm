@@ -122,7 +122,7 @@ sub pull{
 }
 
 sub run{
-    my ($self, $container, $comando) = @_;
+    my ($self, $container, $command) = @_;
     
     $self->execSalida(
 
@@ -130,7 +130,7 @@ sub run{
 
         "-f",
 
-        $self->{ruta},
+        $self->{path},
 
         "run",
 
@@ -138,7 +138,7 @@ sub run{
 
         $container,
 
-        split(/\s+/, $comando), 
+        split(/\s+/, $command), 
 
     );
 }

@@ -69,6 +69,26 @@ sub run{
             @args
         );
     }
+    
+    sub command_task{
+        my ($self, $service, $task) = @_;
+
+        unless($service){
+            $self->error("A service is needed");
+        }
+
+        # if a task is not provided, we list tasks
+        my $command = ($task) ? "task" : "taskList";
+
+        $self->__instantiateCommands->$command(
+
+            $service,
+
+            $task
+
+        );
+        
+    }
 
 sub __instantiateCommands{
     
