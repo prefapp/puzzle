@@ -25,7 +25,7 @@ sub runTasks :Sig(self, PrefApp::Puzzle::PieceTasks){
 sub runTask :Sig(self, PrefApp::Puzzle::PieceTask){
     my ($self, $task) = @_;
 
-    foreach my $t ($task->tasks_list){
+    foreach my $t (@{$task->tasks_list}){
 
         $self->dockerForService->run(
 

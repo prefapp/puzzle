@@ -107,13 +107,25 @@ sub up{
 
     # we need to load all the pieces in the db
     foreach my $service (@services_list){
+        # firstly self information
         $self->c__dbPiece(
-            $self->c__getPieceForService($service)
-        )
+            $self->c__getPieceForService($service),
+            'self'
+        );
+
+    }
+
+    foreach my $service (@services_list){
+        # secondly the rest
+        $self->c__dbPiece(
+            $self->c__getPieceForService($service),
+            'related'
+        );
     }
 
     if($f_new){
         $self->c__compileService($_) foreach(@services_list);
+        @created_services = @services_list;
     }
     else{
         foreach(@services_list){
@@ -136,11 +148,15 @@ sub up{
 
     # for every created service we have to fire the event on_create
     foreach my $service (@created_services){
+        $self->info("Firing on_create for $service");
         $self->c__fireEventForService($service, 'on_create');
     } 
 
     # we up the services
     foreach my $service (@services_list){
+    
+        $self->info("service $service up...");
+            
         $self->c__dockerForService($service)->up;
     }
 
@@ -305,9 +321,9 @@ sub reset{
     }
 
     sub c__dbPiece{
-        my ($self,$piece) = @_;
+        my ($self,$piece, $type) = @_;
 
-        $self->db->loadPiece($piece);
+        $self->db->loadPiece($piece, $type);
         
     }
 
@@ -318,7 +334,7 @@ sub reset{
 
         return sort {
 
-            $self->validServices->{$b} <=> $self->validServices->{$a}
+            $self->validServices->{$a} <=> $self->validServices->{$b}
 
         } grep {
 
@@ -450,13 +466,15 @@ sub reset{
 
         my $runner = $self->c__runnerForService($service);
 
-        my @events = $self->c__getPieceForService(
+        $self->info("  *Running tasks for event $event");
+
+        my @event_tasks = $self->c__getPieceForService(
         
             $service
 
         )->eventFired($event);
 
-        $runner->runTasks($_) foreach(@events);
+        $runner->runTasks($_) foreach(@event_tasks);
     }
 
 
@@ -466,9 +484,7 @@ sub reset{
         my $piece = $self->c__getPieceForService($service);
 
         if(my $task_object = $piece->getTasksFor($task)){
-
-            $self->c__runTaskForService($service)->runTasks($task_object);
-
+            $self->c__runnerForService($service)->runTasks($task_object);
         }
         else{
             $self->error("$service does not have a task labelled $task");

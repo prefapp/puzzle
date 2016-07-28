@@ -11,7 +11,6 @@ has(
 
 );
 
-
 sub getSection :Sig(self, s, s){
     my ($self, $service, $section) = @_;
 
@@ -21,11 +20,17 @@ sub getSection :Sig(self, s, s){
 }
 
 sub loadPiece :Sig(self, PrefApp::Puzzle::Piece){
-    my ($self, $piece) = @_;
+    my ($self, $piece, $type) = @_;
 
+    $type = $type || 'all';
     my $data = $piece->exports;
 
-    foreach my $service (keys(%$data)){
+    my $f_exclusion = ($type eq 'self') ? sub {$_[0] eq '_self'} :
+
+                        ($type eq 'related') ? sub {$_[0] ne '_self'} : sub {1};
+
+
+    foreach my $service (grep { $f_exclusion->($_) } keys(%$data)){
 
         my $service_name = ($service eq '_self') ? 
 

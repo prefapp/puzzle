@@ -45,11 +45,15 @@ sub eventFired:Sig(self, s){
 
     return () unless($self->events->{$event});
 
+    my $tasks = $self->events->{$event}->tasks;
+
+    $tasks = [$tasks] unless(ref($tasks) eq 'ARRAY');
+
     return map {
 
         $self->getTasksFor($_)
 
-    } @{$self->events->{$event}->tasks}
+    } @$tasks
 }
 
 
