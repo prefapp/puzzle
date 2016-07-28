@@ -31,7 +31,8 @@ sub run{
 
         $self->__parseOpts(
             'from=s@',
-            'save=s'
+            'save=s',
+            'box=s'
         );
 
         $self->opts->{from} = {

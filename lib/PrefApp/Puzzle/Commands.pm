@@ -28,7 +28,6 @@ has(
     
     compilation=>undef,
 
-    serviceCompiler=>undef,
 );
 
 sub initialize{
@@ -37,7 +36,9 @@ sub initialize{
 
     $_[0]->env(PrefApp::Puzzle::Environment->new(
 
-        puzzle_compilation_path=>$_[0]->opts->{save}
+        puzzle_compilation_path=>$_[0]->opts->{save},
+
+        puzzle_box=>$_[0]->opts->{box},
 
     ));
 
@@ -69,18 +70,6 @@ sub initialize{
         )
         
     }
-
-    $_[0]->serviceCompiler(
-
-        PrefApp::Puzzle::ServiceCompiler->new(
-
-            refVault=>$_[0]->vault,
-
-            refDB=>$_[0]->db,
-
-            refCompilation=>$_[0]->compilation
-        )
-    );
 
     $_[0];
 }
@@ -115,6 +104,13 @@ sub up{
 
     my @created_services;
     my @upped_services;
+
+    # we need to load all the pieces in the db
+    foreach my $service (@services_list){
+        $self->c__dbPiece(
+            $self->c__getPieceForService($service)
+        )
+    }
 
     if($f_new){
         $self->c__compileService($_) foreach(@services_list);
@@ -264,15 +260,15 @@ sub reset{
         );
 
         # we load the pieces in order
-        foreach my $v ($self->c__listValidServices){
+        #foreach my $v ($self->c__listValidServices){
 
-            $self->c__dbPiece(
+        #    $self->c__dbPiece(
 
-                $self->c__getPieceForService($v)
+        #        $self->c__getPieceForService($v)
 
-            );
+        #    );
 
-        }
+        #}
            
     }
 
@@ -299,7 +295,7 @@ sub reset{
 
         $path = $path || $self->env->puzzle_source_path . '/' . $self->env->puzzle_box;
 
-        opendir(D, $path) || $self->fatal("Could not open pieces box: " . $!);
+        opendir(D, $path) || $self->fatal("Could not open pieces box ($path): " . $!);
         
         my @pieces = grep { $_ =~ /\.yml$/} readdir(D);
         closedir(D);
@@ -374,9 +370,6 @@ sub reset{
 
         );
 
-        if($self->serviceCompiler){
-            $self->serviceCompiler->refCompilation($c);
-        }       
 
         return $c;
     }
@@ -384,7 +377,7 @@ sub reset{
     sub c__compileService{
         my ($self, $service) = @_;
 
-        $self->serviceCompiler->compile(
+        $self->c__getServiceCompiler->compile(
 
             $service,
     
@@ -402,7 +395,7 @@ sub reset{
         # we destroy the original compilation of the service
         $self->compilation->deleteService($service);
 
-        $self->serviceCompiler
+        $self->c__getServiceCompiler
 
             ->args($args)
 
@@ -508,5 +501,20 @@ sub reset{
         my ($self, $service) = @_;
 
         values %{$self->c__getPieceForService($service)->tasks}
+    }
+
+    #
+    # Service compilation facilities
+    #
+    sub c__getServiceCompiler{
+
+        PrefApp::Puzzle::ServiceCompiler->new(
+
+            refVault=>$_[0]->vault,
+
+            refDB=>$_[0]->db,
+
+            refCompilation=>$_[0]->compilation
+        )
     }
 1;

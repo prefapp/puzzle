@@ -21,6 +21,10 @@ eval{
 
     ok($services_list[0] eq 'c' && $services_list[2] eq 'a', "Services are ordered");
 
+    $c->c__dbPiece($c->c__getPieceForService("a"));
+    $c->c__dbPiece($c->c__getPieceForService("b"));
+    $c->c__dbPiece($c->c__getPieceForService("c"));
+
     my $db = $c->db;
 
     ok($db->getSection("b",'foo')->{'a'} == 1, "Related value is correct");

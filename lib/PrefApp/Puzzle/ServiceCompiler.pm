@@ -90,7 +90,7 @@ sub compile{
 
                 $data->{environment},
 
-                $self->refDB->getSection($piece->service, $piece->service, $construction_name) || {}
+                $self->refDB->getSection($piece->service, $construction_name) || {}
             );
 
         # a project volume is needed?   
