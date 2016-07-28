@@ -3,10 +3,9 @@ origin: compose.yml
 weight: 3
 
 exports:
-  foo: 
-    a: 1
-
-related: 
-  foo2:
-    b: 1
+  b:
+    foo: 
+      a: 1
+    foo2:
+      b: 1
 

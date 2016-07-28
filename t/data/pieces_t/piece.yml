@@ -3,12 +3,13 @@ origin: compose.yml
 weight: 0
 
 exports:
-  foo: 
-    a: 1
 
-related: 
-  foo2:
-    b: 1
+  _self:
+    foo: 
+      a: 1
+  other:
+    foo2:
+      b: 1
 
 events:
   on_create:

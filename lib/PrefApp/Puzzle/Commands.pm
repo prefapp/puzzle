@@ -3,7 +3,7 @@ package PrefApp::Puzzle::Commands;
 use strict;
 use Eixo::Base::Clase 'PrefApp::Puzzle::Base';
 
-use PrefApp::Puzzle::Data;
+use PrefApp::Puzzle::DB;
 use PrefApp::Puzzle::Vault;
 use PrefApp::Puzzle::Loader;
 use PrefApp::Puzzle::TaskRunner;
@@ -41,7 +41,7 @@ sub initialize{
 
     ));
 
-    $_[0]->db(PrefApp::Puzzle::Data->new);
+    $_[0]->db(PrefApp::Puzzle::DB->new);
     $_[0]->vault(PrefApp::Puzzle::Vault->new);
 
     $_[0]->loader(
@@ -348,7 +348,7 @@ sub reset{
 
     sub c__dockerForService{
         my ($self, $service) = @_;
-
+    
         return PrefApp::Puzzle::DockerCompose->new(
 
             path=>$self->compilation->serviceComposePath($service)
@@ -489,7 +489,7 @@ sub reset{
 
             service=>$service,
 
-            dockerForService=>$self-c__dockerForService(
+            dockerForService=>$self->c__dockerForService(
 
                 $service
 

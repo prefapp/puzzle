@@ -3,11 +3,13 @@ origin: compose.yml
 weight: 2
 
 exports:
-  foo: 
-    valor: "a"
-  foo2:
-    valor: "a"
-  foo3:
+
+  _self:
+   foo: 
+     valor: "a"
+   foo2:
+     valor: "a"
+   foo3:
 
 related: {}
 

@@ -23,7 +23,7 @@ eval{
 
     my $db = $c->db;
 
-    ok($db->get('foo','valor') eq 'b', "Related value is correct");
+    ok($db->getSection("b",'foo')->{'a'} == 1, "Related value is correct");
 
     done_testing;
 
