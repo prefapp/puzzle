@@ -19,7 +19,7 @@ eval{
 
     my @services_list = $c->c__listValidServices;
 
-    ok($services_list[0] eq 'c' && $services_list[2] eq 'a', "Services are ordered");
+    ok($services_list[0] eq 'a' && $services_list[2] eq 'c', "Services are ordered");
 
     $c->c__dbPiece($c->c__getPieceForService("a"));
     $c->c__dbPiece($c->c__getPieceForService("b"));
