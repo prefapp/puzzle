@@ -146,16 +146,18 @@ sub up{
 
     return $self if(grep {$_ eq '--only-build'} @_);
 
-    # for every created service we have to fire the event on_create
-    foreach my $service (@created_services){
-        $self->info("Firing on_create for $service");
-        $self->c__fireEventForService($service, 'on_create');
-    } 
-
     # we up the services
     foreach my $service (@services_list){
     
         $self->info("service $service up...");
+
+        # for every created service we have to fire the event on_create
+        if( grep{ $service eq $_ } @created_services){
+
+            $self->info("Firing on_create for $service");
+
+            $self->c__fireEventForService($service, "on_create");
+        }
             
         $self->c__dockerForService($service)->up;
     }
