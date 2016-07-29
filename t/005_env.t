@@ -12,6 +12,7 @@ eval{
     mkdir($TMP);
 
     $ENV{HOME} = $TMP;
+    $ENV{PUZZLE_COMPILATION_PATH} = undef;
 
     PrefApp::Puzzle::Environment->new(
 
