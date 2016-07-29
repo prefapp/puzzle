@@ -16,7 +16,7 @@ origin: foo/docker-compose.yml
 application_containers: [container_1, container_2]
 
 # basic environment configuration
-exports:
+env:
   container_1:
     a: 1
     b: 2
@@ -25,10 +25,21 @@ exports:
     FOO: 1
 
 # configuration options for other pieces
-related:
+overrides:
     "container_3 + container_4": 
       c: 3
       d: 4 
+
+tasks:
+    install:
+        arquitecto: 
+            - task 1
+            - task 2
+            - task 3
+        arquitecto_minions:
+            - task 1
+            - task 2
+            - taks 3
 
 ```
 
