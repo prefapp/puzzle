@@ -13,6 +13,7 @@ eval{
 
     $ENV{HOME} = $TMP;
     $ENV{PUZZLE_COMPILATION_PATH} = undef;
+    $ENV{PUZZLE_SOURCE_PATH} = undef;
 
     PrefApp::Puzzle::Environment->new(
 
