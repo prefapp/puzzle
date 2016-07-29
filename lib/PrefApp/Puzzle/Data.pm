@@ -3,7 +3,7 @@ package PrefApp::Puzzle::Data;
 use strict;
 use Eixo::Base::Clase 'PrefApp::Puzzle::Base';
 
-use YAML;
+use YAML::Syck;
 
 has(
     sections=>{}

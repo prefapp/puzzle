@@ -3,7 +3,7 @@ package PrefApp::Puzzle::ServiceCompiler;
 use strict;
 use Eixo::Base::Clase qw(PrefApp::Puzzle::Base);
 
-use YAML qw(Dump);
+use YAML::Syck;
 use JSON::XS;
 use Hash::Merge;
 use List::MoreUtils qw(uniq);  

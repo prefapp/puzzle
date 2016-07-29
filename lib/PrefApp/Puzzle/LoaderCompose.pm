@@ -6,7 +6,7 @@ use Eixo::Base::Clase 'PrefApp::Puzzle::Loader';
 use File::Basename qw(fileparse);
 use PrefApp::Puzzle::Compose;
 
-use YAML qw(Load);
+use YAML::Syck;
 
 sub COMPOSE_CLASS{
     "PrefApp::Puzzle::Compose";

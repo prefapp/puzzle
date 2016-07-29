@@ -61,7 +61,7 @@ sub initialize{
 
 
     # is there a compilation?
-    if(-d $_[0]->env->puzzle_compilation_path){
+    if($_[0]->env->puzzle_compilation_path && -d $_[0]->env->puzzle_compilation_path){
 
         $_[0]->compilation(
 
