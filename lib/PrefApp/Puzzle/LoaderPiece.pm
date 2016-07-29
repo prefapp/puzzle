@@ -6,7 +6,7 @@ use Eixo::Base::Clase 'PrefApp::Puzzle::Loader';
 use PrefApp::Puzzle::Piece;
 use PrefApp::Puzzle::PieceEvent;
 
-use YAML qw(Load);
+use YAML::Syck;
 
 sub PIECE_CLASS{
     "PrefApp::Puzzle::Piece";
