@@ -3,6 +3,25 @@ puzzle
 
 Puzzle is a tool to create environments with docker and docker-compose
 
+##To start using it
+
+```
+Usage: puzzle COMMAND [arg...]
+
+Commands:
+
+    up      Launches one or more puzzle services
+    down    Stops and deletes installed puzzle services
+    ps      Information about installed puzzle services
+    task    Runs a bunch of jobs in a service 
+    
+```
+
+## Config
+
+  - **PUZZLE_SOURCE_PATH**
+  - **PUZZLE_BOX**
+  - **PUZZLE_COMPILATION_PATH**
 
 ##Puzzle - Pieces
 
