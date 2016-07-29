@@ -66,11 +66,10 @@ requires 'Hash::Merge', '>=0.20, <= 0.30';
 requires 'Getopt::Long', '>=2.49, <= 3.0';
 ```
 
+
 To install :
 
-``` 
-cpanfile --installdeps .
-```
+``` cpanfile --installdeps .```
 
 ##COPYRIGHT AND LICENCE
 
