@@ -102,6 +102,16 @@ sub up{
     
     my @services_list = $self->c__listValidServices(@services);
 
+
+    # installed services that are related to the services we are goint to start 
+    my %related_services;  
+
+    unless($f_new){
+        $related_services{$_} = 1 foreach($self->c__installedServices);
+
+        delete $related_services{$_} foreach(@services_list);
+    }
+
     my @created_services;
     my @upped_services;
 
@@ -115,7 +125,7 @@ sub up{
 
     }
 
-    foreach my $service (@services_list){
+    foreach my $service (@services_list, keys(%related_services)){
         # secondly the rest
         $self->c__dbPiece(
             $self->c__getPieceForService($service),
