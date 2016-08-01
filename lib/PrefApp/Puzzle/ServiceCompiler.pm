@@ -48,6 +48,7 @@ sub recompile{
 sub compile{
     my ($self, $service, %args) = @_;
 
+
     $self->args(\%args);
 
     # we load the piece
@@ -66,6 +67,8 @@ sub compile{
         $service,
 
         "args" => $self->__exportArgs,
+
+        "env" => $self->__exportEnv($args{env}),
 
         "docker-compose.yml" => Dump($self->compose_data),
 
@@ -143,6 +146,11 @@ sub compile{
 
     sub __exportArgs{
         JSON::XS->new->encode($_[0]->args)
+    }
+
+    sub __exportEnv{
+        my ($self, $env) = @_;
+        JSON::XS->new->encode($env || \%ENV)
     }
 
     sub __dependencies{

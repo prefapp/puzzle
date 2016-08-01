@@ -17,6 +17,8 @@ sub DOCKER{
 has(
 
     path=>undef,
+
+    env=>undef,
 );
 
 sub recargar{
@@ -164,7 +166,7 @@ sub exec{
     local *MYERR = IO::File->new_tmpfile;
 
     # set environment
-    #local %ENV = (%ENV, %{$self->{env}});
+    local %ENV = %{$self->{env} || {}};
 
     my $pid = open3(
             

@@ -100,6 +100,32 @@ sub getServiceCompilationArgs :Sig(self, s){
     );
 }
 
+sub getServiceCompilationEnv :Sig(self, s){
+    my ($self, $service) = @_;
+
+    JSON::XS->new->decode(
+
+        $self->__getFile(
+
+            join(
+
+                "/",
+
+                $self->path,
+
+                $service,
+
+                "env"
+
+            )
+
+
+        )
+
+    );
+
+}
+
 sub getServices{
     return $_[0]->__loadServices;
 }

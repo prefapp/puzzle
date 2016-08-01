@@ -141,7 +141,14 @@ sub up{
         @upped_services = grep {$self->c__isServiceInstalled($_)} @services_list;
 
         $self->c__compileService($_) foreach(@created_services);
-        $self->c__recompileService($_) foreach(@upped_services);
+        
+        $self->c__recompileService(
+
+            $_, 
+
+            env=>$self->c__mergeEnv($_)
+    
+        ) foreach(@upped_services);
     }
 
     return $self if(grep {$_ eq '--only-build'} @_);
@@ -159,7 +166,11 @@ sub up{
             $self->c__fireEventForService($service, "on_create");
         }
             
-        $self->c__dockerForService($service)->up;
+        $self->c__dockerForService($service)
+
+            ->env($self->c__mergeEnv($service))
+
+            ->up;
     }
 
     $self;
@@ -365,8 +376,8 @@ sub reset{
     
         return PrefApp::Puzzle::DockerCompose->new(
 
-            path=>$self->compilation->serviceComposePath($service)
-
+            path=>$self->compilation->serviceComposePath($service),
+            env=>$self->compilation->getServiceCompilationEnv($service)
         )
         
     }
@@ -405,7 +416,7 @@ sub reset{
     }
 
     sub c__recompileService{
-        my ($self, $service) = @_;
+        my ($self, $service, %args) = @_;
 
         # we need to retrieve args from a service
         my $args = $self->compilation->getServiceCompilationArgs($service);
@@ -421,7 +432,9 @@ sub reset{
 
                 $service,
 
-                $self->c__getArgsToCompilation($service)
+                $self->c__getArgsToCompilation($service),
+
+                %args
             )
     }
 
@@ -534,5 +547,16 @@ sub reset{
 
             refCompilation=>$_[0]->compilation
         )
+    }
+
+    sub c__mergeEnv{
+        my ($self, $service) = @_;
+
+        my $env = $self->compilation->getServiceCompilationEnv($service);
+
+        my %merged_env = (%$env, %ENV);
+
+        \%merged_env;
+        
     }
 1;
