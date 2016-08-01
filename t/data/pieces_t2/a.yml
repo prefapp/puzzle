@@ -2,5 +2,7 @@ origin: compose.yml
 
 weight: 1
 
+application_containers: []
+
 exports: {}
 

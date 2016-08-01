@@ -5,8 +5,13 @@ use Eixo::Base::Clase 'PrefApp::Puzzle::Loader';
 
 use PrefApp::Puzzle::Piece;
 use PrefApp::Puzzle::PieceEvent;
+use PrefApp::Puzzle::PieceValidator;
 
 use YAML::Syck;
+
+sub PIECE_VALIDATOR_CLASS{
+    "PrefApp::Puzzle::PieceValidator";
+}
 
 sub PIECE_CLASS{
     "PrefApp::Puzzle::Piece";
@@ -54,6 +59,13 @@ sub __load{
 
     );
 
+    # we validate the piece
+    $self->PIECE_VALIDATOR_CLASS
+
+        ->new
+
+        ->validate($piece);
+        
     return $piece;
 }
 

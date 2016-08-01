@@ -2,6 +2,8 @@ origin: compose.yml
 
 weight: 2
 
+application_containers: []
+
 exports:
 
   _self:
