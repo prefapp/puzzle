@@ -113,8 +113,9 @@ sub up{
         $self->compilation->create;
     }
     
-    my @services_list = $self->c__areValidServices(@services) || 
-        $self->c__listValidServices();
+    my @services_list = $self->c__areValidServices(@services);
+
+    @services_list =$self->c__listValidServices() unless(@services_list);
 
 
     # installed services that are related to the services we are goint to start 
@@ -131,6 +132,7 @@ sub up{
 
     # we need to load all the pieces in the db
     foreach my $service (@services_list){
+
         # firstly self information
         $self->c__dbPiece(
             $self->c__getPieceForService($service),
@@ -146,6 +148,7 @@ sub up{
             'related'
         );
     }
+
 
     if($f_new){
         $self->c__compileService($_) foreach(@services_list);
@@ -401,11 +404,11 @@ sub reload{
     sub c__areValidServices{
         my ($self, @list) = @_;
 
-        return (grep {
+        return grep {
             
             $self->c__isValidService($_)
         
-        } @list)
+        } @list
     }
 
 

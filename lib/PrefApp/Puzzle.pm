@@ -1,4 +1,4 @@
-;package PrefApp::Puzzle;
+package PrefApp::Puzzle;
 
 use 5.018001;
 use strict;
