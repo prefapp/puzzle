@@ -14,6 +14,7 @@ lib/PrefApp/Puzzle/DBService.pm
 lib/PrefApp/Puzzle/DockerCompose.pm
 lib/PrefApp/Puzzle/Entity.pm
 lib/PrefApp/Puzzle/Environment.pm
+lib/PrefApp/Puzzle/Images.pm
 lib/PrefApp/Puzzle/Loader.pm
 lib/PrefApp/Puzzle/LoaderCompose.pm
 lib/PrefApp/Puzzle/LoaderComposeConstruction.pm
@@ -28,9 +29,11 @@ lib/PrefApp/Puzzle/PieceValidator.pm
 lib/PrefApp/Puzzle/ServiceCompiler.pm
 lib/PrefApp/Puzzle/TaskRunner.pm
 lib/PrefApp/Puzzle/Vault.pm
+lib/PrefApp/Puzzle/YAML.pm
 Makefile.PL
 MANIFEST
 README.md
+t/000_compile.t
 t/001_base.t
 t/002_entity.t
 t/003_piece.t
@@ -38,6 +41,8 @@ t/004_compilation.t
 t/005_env.t
 t/006_commands.t
 t/007_export_compose.t
+t/008_list_images.t
+t/10_YAML.t
 t/data/arquitecto/arquitecto_base_puzzle.yml
 t/data/arquitecto/arquitecto_puzzle.yml
 t/data/compose.yml
