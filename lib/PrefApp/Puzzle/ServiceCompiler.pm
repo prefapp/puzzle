@@ -3,7 +3,6 @@ package PrefApp::Puzzle::ServiceCompiler;
 use strict;
 use Eixo::Base::Clase qw(PrefApp::Puzzle::Base);
 
-use YAML::Syck;
 use JSON::XS;
 use Hash::Merge;
 use List::MoreUtils qw(uniq);  
@@ -70,7 +69,7 @@ sub compile{
 
         "env" => $self->__exportEnv($args{env}),
 
-        "docker-compose.yml" => Dump($self->compose_data),
+        "docker-compose.yml" => PrefApp::Puzzle::YAML::Dump($self->compose_data),
 
         $self->__dependencies($compose)
 
@@ -163,7 +162,7 @@ sub compile{
 
         return map {
 
-                basename($_->path) => Dump($_->data)
+                basename($_->path) => PrefApp::Puzzle::YAML::Dump($_->data)
 
         } values(%dependencies);
 
