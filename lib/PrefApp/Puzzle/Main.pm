@@ -5,6 +5,7 @@ use Eixo::Base::Clase 'PrefApp::Puzzle::Base';
 
 use Getopt::Long;
 
+use PrefApp::Puzzle;
 use PrefApp::Puzzle::Commands;
 
 has(
@@ -28,6 +29,11 @@ sub run{
     
     $self->$code(@args);
 }
+
+    sub command_version{
+    
+        print "Puzzle version: " . $PrefApp::Puzzle::VERSION . "\n";
+    }
 
     sub command_up{
         my ($self, @args) = @_; 
