@@ -5,8 +5,6 @@ use Eixo::Base::Clase 'PrefApp::Puzzle::Loader';
 
 use PrefApp::Puzzle::ComposeConstruction;
 
-use YAML::Syck;
-
 sub COMPOSE_CONSTRUCTION_CLASS{
     "PrefApp::Puzzle::ComposeConstruction";
 }

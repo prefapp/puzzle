@@ -7,7 +7,7 @@ use PrefApp::Puzzle::Piece;
 use PrefApp::Puzzle::PieceEvent;
 use PrefApp::Puzzle::PieceValidator;
 
-use YAML::Syck;
+use PrefApp::Puzzle::YAML;
 
 sub PIECE_VALIDATOR_CLASS{
     "PrefApp::Puzzle::PieceValidator";
@@ -72,7 +72,7 @@ sub __load{
     sub __loadPieceData{
         my ($self, $service, $box) = @_;
 
-        Load(
+        PrefApp::Puzzle::YAML::Load(
 
             $self->__slurp(
 

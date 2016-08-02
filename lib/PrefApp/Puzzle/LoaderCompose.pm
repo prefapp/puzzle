@@ -6,7 +6,7 @@ use Eixo::Base::Clase 'PrefApp::Puzzle::Loader';
 use File::Basename qw(fileparse);
 use PrefApp::Puzzle::Compose;
 
-use YAML::Syck;
+use PrefApp::Puzzle::YAML;
 
 sub COMPOSE_CLASS{
     "PrefApp::Puzzle::Compose";
@@ -47,12 +47,11 @@ sub __load{
     sub __loadComposeData{
         my ($self, $name) = @_;
 
-        Load(
+        PrefApp::Puzzle::YAML::Load(
 
             $self->__slurp(
-
                 $self->__calculateComposePath($name)
-           ) 
+            ) 
         )
     }
 
