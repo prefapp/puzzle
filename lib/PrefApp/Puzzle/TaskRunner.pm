@@ -13,27 +13,39 @@ has(
 );
 
 sub runTasks :Sig(self, PrefApp::Puzzle::PieceTasks){
-    my ($self, $tasks) = @_;
+    my ($self, $tasks, $continue) = @_;
 
     $self->info("Running ", $tasks->label, " for ", $self->service);
 
     foreach my $task (values %{$tasks->tasks}){
-        $self->runTask($task);
+        $self->runTask($task, $continue);
     }
 }
 
 sub runTask :Sig(self, PrefApp::Puzzle::PieceTask){
-    my ($self, $task) = @_;
+    my ($self, $task, $continue) = @_;
 
     foreach my $t (@{$task->tasks_list}){
 
-        $self->dockerForService->run(
+        eval{
 
-            $task->container,
+            $self->dockerForService->run(
+
+                $task->container,
             
-            $t
+                $t
 
-        );
+            );
+
+        };
+        if($@){
+
+            unless($continue){
+                $self->fatal($@);
+            }
+
+            print $@;
+        }
     }
 
 }

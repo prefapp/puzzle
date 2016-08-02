@@ -201,7 +201,7 @@ sub down{
         $self->info("Down of service ", $service);
 
         # fire event on_destroy
-        $self->c__fireEventForService($service, "on_destroy");
+        $self->c__fireEventForService($service, "on_destroy", "--do-not-die");
 
         # down
         $self->c__dockerForService($service)->down; 
@@ -487,7 +487,7 @@ sub reset{
     # Commands for events
     #
     sub c__fireEventForService{
-        my ($self, $service, $event) = @_;
+        my ($self, $service, $event, $continue) = @_;
 
         my $runner = $self->c__runnerForService($service);
 
@@ -499,7 +499,7 @@ sub reset{
 
         )->eventFired($event);
 
-        $runner->runTasks($_) foreach(@event_tasks);
+        $runner->runTasks($_, $continue) foreach(@event_tasks);
     }
 
 
