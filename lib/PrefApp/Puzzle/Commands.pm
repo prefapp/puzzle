@@ -113,7 +113,8 @@ sub up{
         $self->compilation->create;
     }
     
-    my @services_list = $self->c__listValidServices(@services);
+    my @services_list = $self->c__areValidServices(@services) || 
+        $self->c__listValidServices();
 
 
     # installed services that are related to the services we are goint to start 
@@ -207,6 +208,8 @@ sub down{
         $self->error("There is no working compilation");
     }
 
+    my $flag_keep_services_configuration = $self->c__areValidServices(@services);
+
     my @services_list = $self->c__listInstalledServices(@services);
 
     foreach my $service (reverse @services_list){
@@ -220,7 +223,9 @@ sub down{
         $self->c__dockerForService($service)->down; 
    
         # destroy service configuration
-        $self->c__deleteServiceConfiguration($service);
+        unless($flag_keep_services_configuration){
+            $self->c__deleteServiceConfiguration($service);
+        }
 
         $self->info("Service $service is down");
     }
@@ -383,20 +388,29 @@ sub reload{
     }
 
     sub c__listValidServices{
-        my ($self, @list) = @_;
-
-        @list = (@list) ? @list : keys(%{$self->validServices});
+        my ($self) = @_;
 
         return sort {
-
+        
             $self->validServices->{$a} <=> $self->validServices->{$b}
 
+        } keys(%{$self->validServices});
+    }
+
+    sub c__areValidServices{
+        my ($self, @list) = @_;
+
+        return sort{
+
+            $self->validServices->{$a} <=> $self->validServices->{$b}
+        
         } grep {
-
+            
             $self->c__isValidService($_)
-
+        
         } @list;
     }
+
 
     sub c__isValidService{
 
@@ -409,7 +423,7 @@ sub reload{
 
         @list = (@list) ? @list : $self->commands->getServices;
 
-        $self->c__listValidServices(@list);
+        $self->c__areValidServices(@list);
 
     }
 
