@@ -224,6 +224,7 @@ sub down{
    
         # destroy service configuration
         unless($flag_keep_services_configuration){
+            $self->info("Deleting service $service configuration");
             $self->c__deleteServiceConfiguration($service);
         }
 
@@ -400,15 +401,11 @@ sub reload{
     sub c__areValidServices{
         my ($self, @list) = @_;
 
-        return sort{
-
-            $self->validServices->{$a} <=> $self->validServices->{$b}
-        
-        } grep {
+        return (grep {
             
             $self->c__isValidService($_)
         
-        } @list;
+        } @list)
     }
 
 
@@ -421,7 +418,7 @@ sub reload{
     sub c__installedServices{
         my ($self, @list) = @_;
 
-        @list = (@list) ? @list : $self->commands->getServices;
+        @list = (@list)? @list : $self->compilation->getServices;
 
         $self->c__areValidServices(@list);
 
