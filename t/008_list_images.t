@@ -19,7 +19,8 @@ eval{
     $c->up("arquitecto", '--only-build');
 
     # let's list the images
-    print Dumper($c->c__listServiceImages("arquitecto")->services);
+    $c->c__loadServicesImages(qw(arquitecto));
+    print Dumper($c->c__listServiceImages("arquitecto"));
 
     done_testing();
 
