@@ -18,13 +18,8 @@ eval{
 
     $c->up("arquitecto", '--only-build');
 
-    ok(-d $ENV{PUZZLE_COMPILATION_PATH}, "Compilation directory created");
-
-    ok(-d $ENV{PUZZLE_COMPILATION_PATH} . '/arquitecto', "Service compilation created");
-
-    ok(-f $ENV{PUZZLE_COMPILATION_PATH} . '/arquitecto/docker-compose.yml', "Main compilation file created");
-
-    ok(-f $ENV{PUZZLE_COMPILATION_PATH} . '/arquitecto/compose_base.yml', "Extended file created");
+    # let's list the images
+    print Dumper($c->c__listServiceImages("arquitecto")->services);
 
     done_testing();
 

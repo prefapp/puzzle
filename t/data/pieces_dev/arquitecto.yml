@@ -1,4 +1,4 @@
-origin: "arquitecto/arquitecto_puzzle.yml"
+origin: "compose.yml"
 
 application_containers: ["arquitecto", "arquitecto_minions"]
 
@@ -10,14 +10,8 @@ exports:
 
     "arquitecto + arquitecto_minions": 
   
-      NOMBRE_BBDD: "arquitecto_bd"
-      USER_BBDD: "arquitecto_user"
-      PASSWORD_BBDD: "lJQiCN4tjNMf7QUHAanIiQ"
       HOST_BBDD: "mysql"
       DRIVER_BBDD: "mysql"
-      URL_RIYIC: "http://riyic.com/api/v1"
-      USERNAME: 'arquitecto_pre@prefapp.in'
-      TOKEN: "821bffc0322ee6f60fb6f354ed6a0e97c72360ea"
       LOGS_GELF: 0
       PREFABRICAR_BLUEPRINTS: 0
       URL_FABRICADOR: ""

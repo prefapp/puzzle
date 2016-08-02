@@ -12,17 +12,10 @@ arquitecto:
     - data
   #command: plackup bin/start_api.psgi
   environment:
-    - NOMBRE_BBDD=arquitecto_bd
-    - USER_BBDD=arquitecto_user
-    - PASSWORD_BBDD=lJQiCN4tjNMf7QUHAanIiQ
     - HOST_BBDD=mysql
     - DRIVER_BBDD=mysql
-    - URL_RIYIC=http://riyic.com/api/v1
-    - USERNAME=arquitecto@prefapp.in
-    - TOKEN=36e4d2e66aeb7b2ed0837c19f2e76e43f3d5ece4
     - ENVIRONMENT=production
     - LOGS_GELF=1
-    - GELF_HOST=logs-prefapp.westeurope.cloudapp.azure.com
 
   external_links:
     - mysql:mysql
@@ -39,18 +32,11 @@ arquitecto_minions:
     - data
   command: tarea start_minions foreground=1
   environment:
-    - NOMBRE_BBDD=arquitecto_bd
-    - USER_BBDD=arquitecto_user
-    - PASSWORD_BBDD=lJQiCN4tjNMf7QUHAanIiQ
     - HOST_BBDD=mysql
     - DRIVER_BBDD=mysql
-    - URL_RIYIC=http://riyic.com/api/v1
-    - USERNAME=arquitecto@prefapp.in
-    - TOKEN=36e4d2e66aeb7b2ed0837c19f2e76e43f3d5ece4
     - MINIONS_NUMERO=5
     - ENVIRONMENT=production
     - LOGS_GELF=1
-    - GELF_HOST=logs-prefapp.westeurope.cloudapp.azure.com
 
   external_links:
     - mysql:mysql

@@ -5,6 +5,7 @@ use Eixo::Base::Clase 'PrefApp::Puzzle::Base';
 
 use PrefApp::Puzzle::DB;
 use PrefApp::Puzzle::Vault;
+use PrefApp::Puzzle::Images;
 use PrefApp::Puzzle::Loader;
 use PrefApp::Puzzle::TaskRunner;
 use PrefApp::Puzzle::Compilation;
@@ -28,6 +29,7 @@ has(
     
     compilation=>undef,
 
+    images=>undef,
 );
 
 sub initialize{
@@ -70,6 +72,17 @@ sub initialize{
         )
         
     }
+
+    # For images listing
+    $_[0]->images(
+
+        PrefApp::Puzzle::Images->new(
+
+            refVault=>$_[0]->vault
+
+        )
+
+    );
 
     $_[0];
 }
@@ -264,6 +277,25 @@ sub restart{
 
 sub reset{
 
+}
+
+sub reload{
+    my ($self, @services) = @_;
+
+    unless($self->compilation){
+        $self->error("There is no working compilation");
+    }
+
+    my @services_list = $self->c__listInstalledServices(@services);
+
+    foreach(@services_list){
+
+        $self->info("Pulling images of service $_");
+
+        $self->c__dockerForService($_)->composePull;
+    }
+
+    $self->up(@services);
 }
 
 #
@@ -568,5 +600,20 @@ sub reset{
 
         \%merged_env;
         
+    }
+
+    #
+    # Images facilities
+    #
+    sub c__loadServicesImages{
+        my ($self, @services) = @_;
+
+        $self->images->getServiceImages($_) foreach(@services);
+    }
+
+    sub c__listServiceImages{
+        my ($self, $service) = @_;
+
+        $self->images->listImages($service)
     }
 1;

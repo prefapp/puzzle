@@ -117,6 +117,22 @@ sub down{
     );
 }
 
+sub composePull{
+    my ($self) = @_;
+
+    $self->execSalida(
+
+        $self->DOCKER_COMPOSE,
+
+        "-f",
+
+        $self->{path},
+
+        "pull"
+
+    );
+}
+
 sub pull{
     my ($self, $imagen) = @_;
 
@@ -149,7 +165,7 @@ sub execSalida{
     &exec(@_);
 
     print $_[0]->{stdout}, "\n";
-  #  print $_[0]->{stderr}, "\n";
+    print $_[0]->{stderr}, "\n";
 }
 
 sub exec{
