@@ -3,10 +3,14 @@ package PrefApp::Puzzle::Main;
 use strict;
 use Eixo::Base::Clase 'PrefApp::Puzzle::Base';
 
+use Eixo::Base::Data;
+
 use Getopt::Long;
 
 use PrefApp::Puzzle;
 use PrefApp::Puzzle::Commands;
+
+my $HELP_COMMANDS = &Eixo::Base::Data::getDataBySections(__PACKAGE__);
 
 has(
 
@@ -42,8 +46,11 @@ sub run{
             'from=s@',
             'save=s',
             'box=s',
-            'only-build=s'
+            'help',
+            'only-build',
         );
+
+        return $self->__printCommandHelp("up") if($self->opts->{help});
 
         $self->opts->{from} = {
 
@@ -134,7 +141,7 @@ sub __parseOpts{
             $key = $_;
         }
 
-        if($t =~ /\@/){
+        if($t && $t =~ /\@/){
             $opts{$key} = [];
             $get_opts{$_} = $opts{$key};
         }
@@ -143,12 +150,30 @@ sub __parseOpts{
         }
 
     }
-    
+
     Getopt::Long::Parser->new->getoptionsfromarray($self->argv, %get_opts);
 
     $self->opts(\%opts);
 
 }
 
+sub __printCommandHelp{
+    my ($self, $command) = @_;
+    
+    print $HELP_COMMANDS->{$command};
+}
 
 1;
+
+__DATA__
+
+@@up
+
+Usage: puzzle up (service1 service2...) [OPTIONS]
+
+Creates/recreates a set of puzzle services
+
+   --save           Save compilation to the specified location
+   --from           Attachs a directory as the project working dir
+   --only-build     Just creates the compilation
+   --help           Prints this help
