@@ -8,6 +8,9 @@ use Getopt::Long;
 use PrefApp::Puzzle::Commands;
 
 has(
+
+    command=>undef,
+
     opts=>{},
 
     argv=>[],
@@ -47,12 +50,21 @@ sub run{
             } @{$_[0]->opts->{from} || []}
         };
 
-        $self->__instantiateCommands->up(
+        my $up_command = $self->{command} || "up";
+
+        $self->__instantiateCommands->$up_command(
 
             @args
 
         )->end;
-        
+    }
+
+    sub command_reload{
+        my ($self, @args) = @_;
+
+        $self->{command} = "reload";
+
+        $self->command_up(@args);
     }
 
     sub command_down{

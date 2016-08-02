@@ -14,7 +14,11 @@ has(
 sub listImages :Sig(self, s){
     my ($self, $service) = @_;
 
-    keys($self->services->{$service});
+    unless($self->services->{$service}){
+        $self->fatal("Could not find information of images for service $service");
+    }
+
+    keys(%{$self->services->{$service}});
 }
 
 sub getServiceImages :Sig(self, s){
