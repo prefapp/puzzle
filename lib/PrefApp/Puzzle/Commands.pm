@@ -101,8 +101,17 @@ sub up{
     my ($self, @services) = @_;
 
     my $f_new;
+    my @services_list;
 
-    unless($self->compilation){
+    @services = $self->c__areValidServices(@services);
+
+    if($self->compilation){
+
+        unless(@services){
+            @services_list = $self->c__listInstalledServices();
+        }
+    }
+    else{
 
         $f_new = 1;
 
@@ -111,11 +120,12 @@ sub up{
         );
 
         $self->compilation->create;
+
+        @services_list = @services;
+
+        @services_list =$self->c__listValidServices() unless(@services_list);
     }
     
-    my @services_list = $self->c__areValidServices(@services);
-
-    @services_list =$self->c__listValidServices() unless(@services_list);
 
 
     # installed services that are related to the services we are goint to start 
