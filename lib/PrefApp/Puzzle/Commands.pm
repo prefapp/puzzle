@@ -390,7 +390,11 @@ sub reload{
     sub c__listValidServices{
         my ($self) = @_;
 
-        keys(%{$self->validServices});
+        return sort {
+        
+            $self->validServices->{$a} <=> $self->validServices->{$b}
+
+        } keys(%{$self->validServices});
     }
 
     sub c__areValidServices{
