@@ -32,7 +32,8 @@ sub run{
         $self->__parseOpts(
             'from=s@',
             'save=s',
-            'box=s'
+            'box=s',
+            'only-build=s'
         );
 
         $self->opts->{from} = {
