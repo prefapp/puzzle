@@ -19,9 +19,9 @@ Commands:
 
 ## Config
 
-  - **PUZZLE_SOURCE_PATH**
-  - **PUZZLE_BOX**
-  - **PUZZLE_COMPILATION_PATH**
+  - **PUZZLE_SOURCE_PATH**: Base path where puzzle can locate compose files and pieces to process
+  - **PUZZLE_BOX**: folder inside PUZZLE_SOURCE_PATH where are defined the pieces of a environment
+  - **PUZZLE_COMPILATION_PATH**: path where puzzle stores the final docker-compose files processed
 
 ##Puzzle - Pieces
 
