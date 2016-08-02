@@ -20,7 +20,9 @@ eval{
 
     # let's list the images
     $c->c__loadServicesImages(qw(arquitecto));
-    print Dumper($c->c__listServiceImages("arquitecto"));
+    my @images = $c->c__listServiceImages("arquitecto");
+
+    ok((grep {$_ eq 'busybox'} @images), "Images are correct");
 
     done_testing();
 
