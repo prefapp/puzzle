@@ -579,6 +579,12 @@ sub reload{
     sub c__runnerForService{
         my ($self, $service) = @_;
 
+        my @extras;
+
+        if(my $t_arg = $self->opts->{t_arg}){
+            @extras = map { $_ . "=" . $t_arg->{$_}} keys(%$t_arg);
+        }
+
         PrefApp::Puzzle::TaskRunner->new(
 
             service=>$service,
@@ -587,7 +593,9 @@ sub reload{
 
                 $service
 
-            )
+            ),
+
+            extra=>\@extras
 
         );
     }
