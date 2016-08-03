@@ -268,6 +268,10 @@ sub ps{
 sub task{
     my ($self, $service, $task) = @_;
 
+    unless($self->compilation){
+        $self->error("There is no working compilation");
+    }
+
     unless($self->c__isServiceInstalled($service)){
         $self->error("$service is not installed");
     }
