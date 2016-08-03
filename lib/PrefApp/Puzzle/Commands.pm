@@ -101,8 +101,17 @@ sub up{
     my ($self, @services) = @_;
 
     my $f_new;
+    my @services_list;
 
-    unless($self->compilation){
+    @services = $self->c__areValidServices(@services);
+
+    if($self->compilation){
+
+        unless(@services){
+            @services_list = $self->c__listInstalledServices();
+        }
+    }
+    else{
 
         $f_new = 1;
 
@@ -111,11 +120,12 @@ sub up{
         );
 
         $self->compilation->create;
+
+        @services_list = @services;
+
+        @services_list =$self->c__listValidServices() unless(@services_list);
     }
     
-    my @services_list = $self->c__areValidServices(@services);
-
-    @services_list =$self->c__listValidServices() unless(@services_list);
 
 
     # installed services that are related to the services we are goint to start 
@@ -257,6 +267,10 @@ sub ps{
 
 sub task{
     my ($self, $service, $task) = @_;
+
+    unless($self->compilation){
+        $self->error("There is no working compilation");
+    }
 
     unless($self->c__isServiceInstalled($service)){
         $self->error("$service is not installed");
@@ -578,6 +592,12 @@ sub reload{
     sub c__runnerForService{
         my ($self, $service) = @_;
 
+        my @extras;
+
+        if(my $t_arg = $self->opts->{t_arg}){
+            @extras = map { $_ . "=" . $t_arg->{$_}} keys(%$t_arg);
+        }
+
         PrefApp::Puzzle::TaskRunner->new(
 
             service=>$service,
@@ -586,7 +606,9 @@ sub reload{
 
                 $service
 
-            )
+            ),
+
+            extra=>\@extras
 
         );
     }

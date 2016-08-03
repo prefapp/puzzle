@@ -9,7 +9,7 @@ has(
 
     dockerForService=>undef,
 
-
+    extra=>undef,
 );
 
 sub runTasks :Sig(self, PrefApp::Puzzle::PieceTasks){
@@ -25,6 +25,8 @@ sub runTasks :Sig(self, PrefApp::Puzzle::PieceTasks){
 sub runTask :Sig(self, PrefApp::Puzzle::PieceTask){
     my ($self, $task, $continue) = @_;
 
+    my $extra = join " ", @{$self->extra};
+
     foreach my $t (@{$task->tasks_list}){
 
         eval{
@@ -33,7 +35,7 @@ sub runTask :Sig(self, PrefApp::Puzzle::PieceTask){
 
                 $task->container,
             
-                $t
+                $t . " " . $extra
 
             );
 

@@ -104,6 +104,10 @@ sub run{
             $self->error("A service is needed");
         }
 
+        $self->__parseOpts(
+            't_arg=s%',
+        );
+
         # if a task is not provided, we list tasks
         my $command = ($task) ? "task" : "taskList";
 
@@ -143,6 +147,10 @@ sub __parseOpts{
 
         if($t && $t =~ /\@/){
             $opts{$key} = [];
+            $get_opts{$_} = $opts{$key};
+        }
+        elsif($t && $t =~ /\%/){
+            $opts{$key} = {};
             $get_opts{$_} = $opts{$key};
         }
         else{
