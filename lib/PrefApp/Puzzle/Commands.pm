@@ -404,11 +404,24 @@ sub reload{
     sub c__areValidServices{
         my ($self, @list) = @_;
 
-        return grep {
+        @list = grep {
             
             $self->c__isValidService($_)
         
-        } @list
+        } @list;
+
+        if(@list <= 1){
+	
+            return @list;
+        }
+        else{
+
+            sort {
+                $self->validServices->{$a} <=> $self->validServices->{$b}
+
+            } @list
+        }
+
     }
 
 
