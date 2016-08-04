@@ -594,7 +594,7 @@ sub reload{
 
         my @extras;
 
-        if(my $t_arg = $self->opts->{t_arg}){
+        if(my $t_arg = $self->opts->{arg}){
             @extras = map { $_ . "=" . $t_arg->{$_}} keys(%$t_arg);
         }
 

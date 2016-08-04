@@ -105,8 +105,11 @@ sub run{
         }
 
         $self->__parseOpts(
-            't_arg=s%',
+            'arg=s%',
+            'help',
         );
+
+        return $self->__printCommandHelp("task") if($self->opts->{help});
 
         # if a task is not provided, we list tasks
         my $command = ($task) ? "task" : "taskList";
@@ -184,4 +187,13 @@ Creates/recreates a set of puzzle services
    --save           Save compilation to the specified location
    --from           Attachs a directory as the project working dir
    --only-build     Just creates the compilation
+   --help           Prints this help
+
+@@task
+
+Usage: puzzle task <service> <task_name> [OPTIONS]
+
+Run <task_name> in a new service <service> container
+
+   --arg            Argument to pass to task (can be declared multiple times)
    --help           Prints this help
