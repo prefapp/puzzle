@@ -107,9 +107,8 @@ sub up{
 
     if($self->compilation){
 
-        unless(@services){
-            @services_list = $self->c__listInstalledServices();
-        }
+        @services_list = $self->c__listInstalledServices(@services);
+
     }
     else{
 
@@ -125,8 +124,6 @@ sub up{
 
         @services_list =$self->c__listValidServices() unless(@services_list);
     }
-    
-
 
     # installed services that are related to the services we are goint to start 
     my %related_services;  
