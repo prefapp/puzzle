@@ -684,6 +684,6 @@ sub reload{
     sub c__getAddenda{
         my ($self, $addenda_path) = @_;
 
-        $self->loader->loaderAddenda($addenda_path);
+        $self->loader->loaderAddenda->load($addenda_path);
     }
 1;

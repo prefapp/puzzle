@@ -18,7 +18,7 @@ sub __load{
     my $data = $self->__loadAddendaData($addenda);
 
     # we create the piece
-    my $piece = $self->createEntity(
+    $self->createEntity(
 
         $self->ADDENDA_CLASS,
 
