@@ -188,7 +188,7 @@ Creates/recreates a set of puzzle services
    --save           Save compilation to the specified location
    --from           Attachs a directory as the project working dir
    --only-build     Just creates the compilation
-   --addenda        Use an .add file
+   --add            Use an .add file
    --help           Prints this help
 
 @@task
