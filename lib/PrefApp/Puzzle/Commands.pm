@@ -122,8 +122,6 @@ sub up{
 
         @services_list = @services;
 
-        die @services_list;
-        
         @services_list =$self->c__listValidServices() unless(@services_list);
     }
 
