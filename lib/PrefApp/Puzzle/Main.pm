@@ -46,6 +46,7 @@ sub run{
             'from=s@',
             'save=s',
             'box=s',
+            'add=s',
             'help',
             'only-build',
         );
@@ -187,6 +188,7 @@ Creates/recreates a set of puzzle services
    --save           Save compilation to the specified location
    --from           Attachs a directory as the project working dir
    --only-build     Just creates the compilation
+   --add            Use an addenda for the compilation
    --help           Prints this help
 
 @@task

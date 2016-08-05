@@ -122,6 +122,8 @@ sub up{
 
         @services_list = @services;
 
+        die @services_list;
+        
         @services_list =$self->c__listValidServices() unless(@services_list);
     }
 
@@ -153,6 +155,13 @@ sub up{
         $self->c__dbPiece(
             $self->c__getPieceForService($service),
             'related'
+        );
+    }
+
+    # lastly the addenda
+    if(my $addenda = $self->opts->{add}){
+        $self->c__dbAddenda(
+            $self->c__getAddenda($addenda)
         );
     }
 
@@ -661,5 +670,20 @@ sub reload{
         my ($self, $service) = @_;
 
         $self->images->listImages($service)
+    }
+
+    #
+    # Addenda facilities
+    #
+    sub c__dbAddenda{
+        my ($self, $addenda) = @_;
+
+        $self->db->loadAddenda($addenda);
+    }
+
+    sub c__getAddenda{
+        my ($self, $addenda_path) = @_;
+
+        $self->loader->loaderAddenda->load($addenda_path);
     }
 1;
