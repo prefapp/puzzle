@@ -19,7 +19,13 @@ sub getSection :Sig(self, s, s){
         $self->services->{$service}->exportSection($section)
 }
 
-sub loadPiece :Sig(self, PrefApp::Puzzle::Piece){
+sub loadAddenda :Sig(self, PrefApp::Puzzle::Addenda){
+    my ($self,$addenda, $type) = @_;
+
+    $self->loadPiece($addenda, "all");
+}
+
+sub loadPiece :Sig(self, PrefApp::Puzzle::Entity){
     my ($self, $piece, $type) = @_;
 
     $type = $type || 'all';

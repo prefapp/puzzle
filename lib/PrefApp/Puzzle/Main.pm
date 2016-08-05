@@ -46,6 +46,7 @@ sub run{
             'from=s@',
             'save=s',
             'box=s',
+            'addenda=s',
             'help',
             'only-build',
         );

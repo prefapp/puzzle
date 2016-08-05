@@ -7,6 +7,7 @@ use PrefApp::Puzzle::LoaderPiece;
 use PrefApp::Puzzle::LoaderCompose;
 use PrefApp::Puzzle::LoaderComposeConstruction;
 use PrefApp::Puzzle::LoaderPieceTasks;
+use PrefApp::Puzzle::LoaderAddenda;
 
 
 sub LOADER_COMPOSE_CLASS{
@@ -23,6 +24,10 @@ sub LOADER_PIECE_CLASS{
 
 sub LOADER_PIECE_TASKS_CLASS{
     "PrefApp::Puzzle::LoaderPieceTasks";
+}
+
+sub LOADER_ADDENDA_CLASS{
+    "PrefApp::Puzzle::LoaderAddenda";
 }
 
 has(
@@ -49,6 +54,10 @@ sub loaderPiece{
 sub loaderCompose{
     $_[0]->loader($_[0]->LOADER_COMPOSE_CLASS);
 }
+
+sub loaderAddenda{
+    $_[0]->loader($_[0]->LOADER_ADDENDA_CLASS);
+}   
 
 sub createEntity{
     my ($self, $class, %args) = @_;
