@@ -181,7 +181,13 @@ sub up{
         @created_services = grep { !$self->c__isServiceInstalled($_)} @services_list;
         @upped_services = grep {$self->c__isServiceInstalled($_)} @services_list;
 
-        $self->c__compileService($_) foreach(@created_services);
+        $self->c__compileService(
+
+            $_,
+
+            env=>\%ENV
+
+        ) foreach(@created_services);
         
         $self->c__recompileService(
 
@@ -491,13 +497,15 @@ sub reload{
     }
 
     sub c__compileService{
-        my ($self, $service) = @_;
+        my ($self, $service, %args) = @_;
 
         $self->c__getServiceCompiler->compile(
 
             $service,
-    
-            $self->c__getArgsToCompilation($service)
+
+            $self->c__getArgsToCompilation($service),
+
+            %args,    
 
         );
     }

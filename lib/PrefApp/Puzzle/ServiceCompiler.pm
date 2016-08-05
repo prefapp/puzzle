@@ -47,7 +47,6 @@ sub recompile{
 sub compile{
     my ($self, $service, %args) = @_;
 
-
     $self->args(\%args);
 
     # we load the piece
