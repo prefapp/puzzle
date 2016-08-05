@@ -159,7 +159,7 @@ sub up{
     }
 
     # lastly the addenda
-    if(my $addenda = $self->opts->{addenda}){
+    if(my $addenda = $self->opts->{add}){
         $self->c__dbAddenda(
             $self->c__getAddenda($addenda)
         );
