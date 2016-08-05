@@ -6,6 +6,16 @@ use Eixo::Base::Clase qw(PrefApp::Puzzle::Base);
 use IPC::Open3;
 use Symbol;
 
+my $EN_MOCKUP = undef;
+my $F_MOCKUP = undef;
+
+sub SET_EN_MOCKUP{
+    my ($self, $code) = @_;
+
+    $EN_MOCKUP = 1;
+    $F_MOCKUP = $code;
+}
+
 sub DOCKER_COMPOSE{
     '/usr/local/bin/docker-compose'   
 }
@@ -15,6 +25,8 @@ sub DOCKER{
 }
 
 has(
+
+    en_mockup=>undef,
 
     path=>undef,
 
@@ -183,6 +195,10 @@ sub exec{
 
     # set environment
     local %ENV = %{$self->{env} || {}};
+
+    if($EN_MOCKUP){
+           return $F_MOCKUP->($self, @comando); 
+    }
 
     my $pid = open3(
             
