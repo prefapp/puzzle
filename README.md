@@ -84,6 +84,8 @@ To install :
 
 ``` cpanfile --installdeps .```
 
+* Needs **make** and **gcc**  
+``` sudo apt-get install make gcc```
 
 ##COPYRIGHT AND LICENCE
 
