@@ -156,7 +156,7 @@ sub run{
 
         $container,
 
-        split(/\s+/, $command), 
+        $self->splitCommand($command)
 
     );
 }
@@ -247,6 +247,23 @@ sub exec{
     }
 
     return $self;
+}
+
+sub splitCommand {
+    my ($self, $cmd) = @_;
+
+    my @cmd;
+    # 
+    # regexp que permite partir por espacios y por bloques entrecomillados
+    #
+    while($cmd =~ /((\"[^"]+\")|(\'[^']+\')|([^\s]+))\s?/g){
+        my $token = $1;
+        $token =~ s/(^["']|["']$)//g;
+        push @cmd, $token;
+    }
+
+    @cmd;
+
 }
 
 1;
