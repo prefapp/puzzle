@@ -14,6 +14,15 @@ has(
     events=>{},
 );
 
+sub FREEZE_KEYS{
+    $_[0]->SUPER::FREEZE_KEYS, 
+    qw(
+        data
+        tasks
+        events
+    )
+}
+
 sub BUILD_ALIAS{
     $_[0]->service . '_piece' 
 }

@@ -3,6 +3,17 @@ package PrefApp::Puzzle::PieceEvent;
 use strict;
 use Eixo::Base::Clase 'PrefApp::Puzzle::Entity';
 
+sub FREEZE_KEYS{
+
+    $_[0]->SUPER::FREEZE_KEYS,
+
+    qw(
+        name
+        referer
+        tasks
+    )
+}
+
 has(
 
     name=>undef,

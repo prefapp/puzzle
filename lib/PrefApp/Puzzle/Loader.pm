@@ -10,6 +10,7 @@ use PrefApp::Puzzle::LoaderPieceTasks;
 use PrefApp::Puzzle::LoaderAddenda;
 
 
+
 sub LOADER_COMPOSE_CLASS{
     "PrefApp::Puzzle::LoaderCompose";
 }
