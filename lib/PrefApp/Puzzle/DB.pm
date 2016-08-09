@@ -5,9 +5,13 @@ use Eixo::Base::Clase 'PrefApp::Puzzle::Base';
 
 use PrefApp::Puzzle::DBService;
 
+use Storable qw(freeze thaw);
+
 has(
 
-    services=>{}
+    services=>{},
+ 
+    entities=>{},
 
 );
 
@@ -58,3 +62,25 @@ sub loadServiceDb{
 
     )
 }
+
+sub STORABLE_freeze{
+    my ($self, $cloning) = @_;
+
+    return freeze({
+
+        entities=>$_[0]->entities
+
+    });
+}
+
+sub STORABLE_thaw{
+    my ($self, $cloning, $serialized) = @_;
+
+    $serialized = thaw($serialized);
+
+    foreach(keys(%$serialized)){
+        $self->{$_} = $serialized->{$_}
+    }
+}
+
+1;

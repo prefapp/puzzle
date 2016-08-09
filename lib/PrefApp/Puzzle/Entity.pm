@@ -15,10 +15,12 @@ has(
 
 );
 
-sub FREEZE_KEYS {qw(
-    service
-    alias
-)}
+sub FREEZE_KEYS {
+    qw(
+        service
+        alias
+    )
+}
 
 sub BUILD_ALIAS :Abstract {}
 

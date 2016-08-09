@@ -47,7 +47,7 @@ sub recompile{
 sub compile{
     my ($self, $service, %args) = @_;
 
-    $self->args(\%args);
+ #   $self->args(\%args);
 
     # we load the piece
     my $piece = $self->refVault->get($service . '_piece');
@@ -63,10 +63,6 @@ sub compile{
     $self->refCompilation->createService(
 
         $service,
-
-        "args" => $self->__exportArgs,
-
-        "env" => $self->__exportEnv($args{env}),
 
         "docker-compose.yml" => PrefApp::Puzzle::YAML::Dump($self->compose_data),
 

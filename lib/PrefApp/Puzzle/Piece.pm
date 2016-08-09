@@ -43,6 +43,10 @@ sub related{
     $_[0]->data->{related} || {};
 }
 
+sub weight{
+    $_[0]->data->{weight};
+}
+
 sub getTasksFor :Sig(self, s){ 
     my ($self, $label) = @_;
 

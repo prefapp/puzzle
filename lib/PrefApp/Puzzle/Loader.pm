@@ -9,6 +9,8 @@ use PrefApp::Puzzle::LoaderComposeConstruction;
 use PrefApp::Puzzle::LoaderPieceTasks;
 use PrefApp::Puzzle::LoaderAddenda;
 
+use PrefApp::Puzzle::EnvCompilation;
+use PrefApp::Puzzle::ServiceCompilationArgs;
 
 
 sub LOADER_COMPOSE_CLASS{
@@ -84,6 +86,26 @@ sub loader{
         } qw(refVault basePath)
     
     )
+}
+
+sub loadEnvCompilation{
+    my ($self) = @_;
+
+    $self->createEntity(
+
+        "PrefApp::Puzzle::EnvCompilation"
+
+    );
+}
+
+sub loadServicesCompilationArgs{
+    my ($self) = @_;
+
+    $self->createEntity(
+
+        "PrefApp::Puzzle::ServiceCompilationArgs"
+
+    );
 }
 
 sub __slurp{
