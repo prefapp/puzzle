@@ -31,7 +31,7 @@ sub allInstalledServices{
 
 sub filterInstalledServices{
     my ($self, @services) = @_;
-    
+
     $self->pieceCommands->sortServices(
 
         grep {
@@ -45,6 +45,17 @@ sub filterInstalledServices{
 
 sub isServiceInstalled{
     $_[0]->refCompilation->serviceInstalled($_[1]);
+}
+
+sub destroyServiceCompilation{
+    my ($self, $service) = @_;
+
+    unless($self->isServiceInstalled($service)){
+
+        $self->fatal("Service $service is not installed: there is no compilation to destroy");
+    }
+
+    $self->refCompilation->deleteService($service);
 }
 
 sub compileServices{
@@ -102,7 +113,9 @@ sub compileServices{
         my ($self, $service) = @_;
 
         $self->refVault
+
             ->get('services_compilation_args')
+
                 ->getServiceArgs($service) || {}
     }
 1;

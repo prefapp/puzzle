@@ -102,19 +102,43 @@ sub down{
     $self->error("There is no working compilation") 
         unless($self->refCompilation->exists);
 
-    @services = $self->compilationCommands->filterInstalledServices(@services);
-
-    unless(@services){
-        @services = $self->compilationCommands
-                        ->allInstalledServices();
-    }
+    @services = $self->__getValidServicesOrAll(@services);
 
     # stop services
     foreach(reverse @services){
+        $self->dockerCommands->stopService($_);
+    }
 
+    # destroy de building
+    foreach(@services){
+        $self->compilationCommands->destroyServiceCompilation(
+            $_
+        );
     }
 }
 
+sub ps{
+    my ($self, @services) = @_;
+
+    $self->error("There is no working compilation") 
+        unless($self->refCompilation->exists);
+
+    @services = $self->__getValidServicesOrAll(@services);
+    
+    foreach(@services){
+        $self->dockerCommands->psService($_);
+    }
+}   
+
+sub __getValidServicesOrAll{
+    my ($self, @services) = @_;
+
+    @services = $self->compilationCommands->filterInstalledServices(@services);
+
+    unless(@services){
+        @services = $self->compilationCommands->allInstalledServices();
+    }
+}
 
 
 sub __servicesList{

@@ -71,7 +71,7 @@ sub stop{
     
         "-f",
     
-        $self->{ruta},
+        $self->{path},
 
         "stop",
 
@@ -91,7 +91,8 @@ sub ps{
 
         $self->{path},
 
-        "ps"
+        "ps",
+
     )
 }   
 

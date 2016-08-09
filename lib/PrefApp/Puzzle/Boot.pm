@@ -71,6 +71,7 @@ sub boot{
 
         __bootDB
         __bootPieces
+        __bootSetValidServices
         __bootAddenda
         __bootEnvironment
         __bootServiceCompilationArgs
@@ -99,6 +100,16 @@ sub __bootPieces{
     return if($self->f_compilationExists);
    
     $self->pieceCommands->loadPieces()
+}
+
+sub __bootSetValidServices{
+    my ($self) = @_;
+
+    $self->refCompilation->validServices([
+
+        $self->pieceCommands->validServices
+
+    ]);
 }
 
 sub __bootAddenda{
@@ -171,8 +182,9 @@ sub dockerCommands{
 
     PrefApp::Puzzle::DockerCommands->new(
 
-        refVault=>$_[0]->vault
+        refVault=>$_[0]->vault,
 
+        refCompilation=>$_[0]->refCompilation,
     );
 }
 
