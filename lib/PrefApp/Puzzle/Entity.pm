@@ -46,6 +46,8 @@ sub create{
     $self;
 }
 
+sub validateThaw    {}
+
 sub STORABLE_freeze{
     my ($self, $cloning, @keys) = @_;
     
@@ -68,6 +70,8 @@ sub STORABLE_thaw{
 
         $self->{$_} = $serialized->{$_};
     }
+
+    $self->validateThaw;
 
     $self;
 }

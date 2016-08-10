@@ -15,6 +15,8 @@ use PrefApp::Puzzle::Compilation;
 use PrefApp::Puzzle::EnvCompilation;
 use PrefApp::Puzzle::ServiceCompilationArgs;
 
+use PrefApp::Puzzle::EventCommands;
+
 has(
 
     refEnv=>undef,
@@ -97,7 +99,9 @@ sub __bootDB{
 sub __bootPieces{
     my ($self, @args) = @_;
 
-    return if($self->f_compilationExists);
+    if(!$self->opts->{rebuild} && $self->f_compilationExists){
+        return;
+    }
    
     $self->pieceCommands->loadPieces()
 }
@@ -186,6 +190,22 @@ sub dockerCommands{
 
         refCompilation=>$_[0]->refCompilation,
     );
+}
+
+sub eventCommands{
+    
+    PrefApp::Puzzle::EventCommands->new(
+
+        refVault=>$_[0]->vault,
+
+        refDB=>$_[0]->refDB,
+
+        refCompilation=>$_[0]->refCompilation,
+
+        opts=>$_[0]->opts,
+
+        dockerCommands=>$_[0]->dockerCommands
+    )
 }
 
 sub loader{

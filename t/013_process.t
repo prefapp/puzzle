@@ -39,13 +39,30 @@ eval{
 
             save=>"$TMP/compilation",
 
-            "only-build"=>1,
+            from=>{
+                "arquitecto"=>"/tmp/foo"
+            }
+
+ #           "only-build"=>1,
         },
 
 
     );
 
     $p->up("arquitecto");
+
+    ok(
+        &test_command(
+
+            "$COMPOSE_PATH -f $compilation_path/arquitecto/docker-compose.yml up -d",
+
+            @{shift @command}
+
+        ),
+
+        "UP was executed correctly"
+
+    );
     
     ok(-d $compilation_path, "Compilation is created");
 
@@ -56,6 +73,22 @@ eval{
     ok(-f $compilation_path . '/arquitecto/docker-compose.yml', "Docker compose of arquitecto exists");
 
     ok(-f $compilation_path . '/arquitecto/compose_base.yml', "Docker base of arquitecto exists");
+
+    local %ENV = ();
+    $ENV{HOME} = $TMP;
+
+    $p = PrefApp::Puzzle::Process->new(
+
+        opts=>{
+
+            addenda=>"./t/data/addenda.yml",
+
+            save=>"$TMP/compilation",
+
+ #           "only-build"=>1,
+        },
+
+    );
 
     $p->ps;
 
@@ -71,7 +104,50 @@ eval{
         "Ps was executed correctly"
 
     );
+    
+    $p->task("arquitecto", "instalar");
 
+    ok(
+        &test_command(
+
+            "$COMPOSE_PATH -f $compilation_path/arquitecto/docker-compose.yml run --rm arquitecto tarea foo1",
+
+            @{shift @command}
+
+        ),
+
+        "Install was executed correctly"
+
+    );
+
+    ok(
+        &test_command(
+
+            "$COMPOSE_PATH -f $compilation_path/arquitecto/docker-compose.yml run --rm arquitecto tarea foo2",
+
+            @{shift @command}
+
+        ),
+
+        "Install second command was executed correctly"
+
+    );
+    
+    my $v = $p->refVault;
+
+    my $construction = $v->get('arquitecto_piece')->compose->constructions->{arquitecto};
+
+    ok($construction->data->{volumes} &&
+
+        @{$construction->data->{volumes}} == 1 &&
+        
+        $construction->data->{volumes}->[0] eq "/tmp/foo:/home/prefapp/prefapp-arquitecto",
+
+        "From option respected"
+
+    );
+
+    # let's recompile changing from option
 
     $p->down;
 

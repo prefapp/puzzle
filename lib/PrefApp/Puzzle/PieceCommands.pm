@@ -42,7 +42,7 @@ sub sortServices{
 
     return @services unless(@services > 1);
 
-    return sort { $a->weight <=> $b->weight } @services;
+    return sort { $self->refVault->get($a . "_piece")->weight <=> $self->refVault->get($b .'_piece')->weight } @services;
 }
 
 sub loadPieces{

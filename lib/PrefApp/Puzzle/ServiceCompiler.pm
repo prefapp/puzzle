@@ -53,7 +53,9 @@ sub compile{
     my $piece = $self->refVault->get($service . '_piece');
 
     # prepare the compose
-    my $compose = $piece->compose;
+    my $compose = $piece->compose || $self->fatal(
+        "Piece " . $piece->alias. " is without compose"
+    );
 
     # let's compile every construction
     $self->__compileConstruction($_, $compose->constructions->{$_}, $piece) 
@@ -97,14 +99,32 @@ sub compile{
 
                 # We need a mount point
                 if(my $mount_point = $self->__find($construction_name . '.working_dir', $piece)){
-                    
-                    $self->__mountVolume(
 
-                        $construction, 
+                    # is already mounted?
+                    if($construction->from_mounted && $construction->from_mounted ne $from){
 
-                        $from . ':' . $mount_point
+                        $self->__umountVolume(
 
-                    );
+                            $construction, 
+
+                            $construction->from_mounted . ':' . $mount_point
+
+                        );
+                    }
+
+                    unless($construction->from_mounted && $construction->from_mounted eq $from){
+
+                     $self->__mountVolume(
+
+                         $construction, 
+
+                         $from . ':' . $mount_point
+
+                     );
+
+                    }
+
+                    $construction->from_mounted($from);
                 }
                 else{
                     $self->error("Construction $construction_name has not established a working_dir, ".
@@ -127,6 +147,16 @@ sub compile{
         $construction->data->{volumes} ||= [];
 
         push @{$construction->data->{volumes}}, $volume;
+    }
+
+    sub __umountVolume{
+        my ($self, $construction, $volume) = @_;
+
+        $construction->data->{volumes} = [grep {
+
+            $_ ne $volume
+
+        } @{$construction->data->{volumes}}];
     }
 
     sub __find{

@@ -8,7 +8,7 @@ use Eixo::Base::Data;
 use Getopt::Long;
 
 use PrefApp::Puzzle;
-use PrefApp::Puzzle::Commands;
+use PrefApp::Puzzle::Process;
 
 my $HELP_COMMANDS = &Eixo::Base::Data::getDataBySections(__PACKAGE__);
 
@@ -47,6 +47,7 @@ sub run{
             'save=s',
             'box=s',
             'add=s',
+            'rebuild',
             'help',
             'only-build',
         );
@@ -70,7 +71,7 @@ sub run{
 
             @args
 
-        )->end;
+        );
     }
 
     sub command_reload{
@@ -127,7 +128,7 @@ sub run{
 
 sub __instantiateCommands{
     
-    PrefApp::Puzzle::Commands->new(
+    PrefApp::Puzzle::Process->new(
         opts=>$_[0]->opts
     )
 }

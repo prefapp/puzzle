@@ -20,11 +20,20 @@ sub FREEZE_KEYS{
         data
         tasks
         events
+        compose
     )
 }
 
 sub BUILD_ALIAS{
     $_[0]->service . '_piece' 
+}
+
+sub validateThaw{
+    my ($self) = @_;
+
+    unless($self->compose){
+        $self->fatal($self->alias . ' has not compose information');
+    }
 }
 
 sub getApplicationContainers{

@@ -15,6 +15,16 @@ has(
 
 );
 
+sub upService{
+    my ($self, $service) = @_;
+    
+    $self->info("Starting service $service...");
+
+    $self->__dockerForService($service)->up();
+
+    $self->info("Service $service up");
+}
+
 sub psService{
     my ($self, @services) = @_;
 
@@ -45,9 +55,8 @@ sub __dockerForService{
         
         env=>$self->refVault
 
-                ->get('services_compilation_args')
+                ->get('env')->env
 
-                    ->getServiceArgs($service)
 
     );
 }

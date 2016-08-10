@@ -13,6 +13,8 @@ has(
 
     refCompilation=>undef,
 
+    refEnv=>undef,
+
     loader=>undef,
 
     pieceCommands=>undef,
@@ -20,6 +22,8 @@ has(
     compilationCommands=>undef,
 
     dockerCommands=>undef,
+
+    eventCommands=>undef,
 
     opts=>undef,
 );
@@ -40,6 +44,7 @@ sub initialize{
 
         )->boot;
 
+        $self->refEnv($boot->refEnv);
         $self->refVault($boot->vault);
         $self->refDB($boot->refDB);
         $self->refCompilation($boot->refCompilation);
@@ -47,6 +52,7 @@ sub initialize{
         $self->pieceCommands($boot->pieceCommands);
         $self->compilationCommands($boot->compilationCommands);
         $self->dockerCommands($boot->dockerCommands);
+        $self->eventCommands($boot->eventCommands);
     }
 
 sub up{
@@ -58,14 +64,39 @@ sub up{
         @services = $self->__servicesList;
     }
 
-    if($self->refCompilation->exists){
+    my $f_in_recompilation;
+
+    if($f_in_recompilation = $self->refCompilation->exists){
         $self->__recompilation(@services);
     }   
     else{
         $self->__createCompilation(@services);
     }
- 
+
     $self->saveContext;   
+
+
+    # up on the services
+    unless($self->opts->{"only-build"}){
+
+        foreach my $service (@services){
+
+            unless($f_in_recompilation){
+
+                $self->eventCommands->fireEventForService(
+
+                    "on_create",
+
+                    $service
+
+                );
+            }
+
+            $self->dockerCommands->upService($service);
+
+        } 
+    }
+
 }
 
     sub __createCompilation{
@@ -89,7 +120,7 @@ sub up{
         } 
 
         # we build the compilation services
-        $self->compilationCommands->compileServices(
+        $self->compilationCommands->recompileServices(
             @services
         );
 
@@ -110,11 +141,25 @@ sub down{
     }
 
     # destroy de building
-    foreach(@services){
+    foreach my $service (@services){
+
+        $self->eventCommands->fireEventForService(
+
+            "on_destroy",
+
+            $service,
+
+            "--continue"
+
+        );
+
         $self->compilationCommands->destroyServiceCompilation(
-            $_
+            $service
         );
     }
+
+    # destroy de compilation if there are no remain services
+    $self->compilationCommands->destroyCompilation();
 }
 
 sub ps{
@@ -129,6 +174,16 @@ sub ps{
         $self->dockerCommands->psService($_);
     }
 }   
+
+sub task{
+    my ($self, $service, $task) = @_;
+
+    unless($self->refCompilation->exists){
+        $self->error("There is no working compilation");
+    }
+
+    $self->eventCommands->runTaskForService($task, $service);
+}
 
 sub __getValidServicesOrAll{
     my ($self, @services) = @_;
@@ -162,6 +217,8 @@ sub saveContext{
         $_[0]->refDB
 
     );
+
+    $_[0]->refEnv->store;
 }
 
 1;

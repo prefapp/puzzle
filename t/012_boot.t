@@ -98,6 +98,8 @@ eval{
         "Services are correctly established"
     );
 
+    ok($vault->get('arquitecto_piece')->compose, "Piece's main compose is kept");
+
     my $sca = $bb->vault->get('services_compilation_args');
 
     ok($sca, "Services compilation args are booted");
@@ -105,7 +107,15 @@ eval{
     ok($sca->getServiceArgs('arquitecto')->{from},
         "Args for compilation are correct"
     );
-    
+
+   # $Data::Dumper::Indent = 1;
+
+   # print Dumper(
+
+   #     retrieve $TMP . "/compilation/puzzle.db"
+
+   # ); 
+   #
     done_testing;
 
 };

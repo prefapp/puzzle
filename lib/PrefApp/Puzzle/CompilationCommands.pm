@@ -21,6 +21,14 @@ has(
 
 );
 
+sub destroyCompilation{
+    my ($self) = @_;
+
+    return if($_[0]->allInstalledServices);
+
+    $self->refCompilation->destroy;    
+}
+
 sub allInstalledServices{
     my ($self) = @_;
 
@@ -56,6 +64,17 @@ sub destroyServiceCompilation{
     }
 
     $self->refCompilation->deleteService($service);
+}
+
+sub recompileServices{
+    my ($self, @services) = @_;
+
+    foreach my $service (@services){
+        # delete original service compilation
+        $self->refCompilation->deleteService($service);
+    }
+
+    $self->compileServices(@services);
 }
 
 sub compileServices{

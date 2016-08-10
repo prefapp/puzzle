@@ -1,10 +1,15 @@
 use strict;
 use Test::More;
 
+use PrefApp::Puzzle::DB;
 use PrefApp::Puzzle::Vault;
 use PrefApp::Puzzle::Entity;
 
-my $vault = PrefApp::Puzzle::Vault->new;
+my $db = PrefApp::Puzzle::DB->new;
+my $vault = PrefApp::Puzzle::Vault->new(
+
+    refDB=>$db
+);
 
 my @entities = map { MockEntity->new(
 
