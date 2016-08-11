@@ -229,7 +229,8 @@ sub vault{
 }
 
 sub compilationPath{
-    $_[0]->refEnv->puzzle_compilation_path
+    $_[0]->refEnv->puzzle_compilation_path || 
+        $_[0]->error("PUZZLE_COMPILATION_PATH not defined");
 }
 
 1;
