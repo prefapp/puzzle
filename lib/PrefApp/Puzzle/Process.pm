@@ -106,7 +106,7 @@ sub up{
 
         # all services
         unless(@services){
-            $self->__servicesList;
+            @services = $self->__servicesList;
         }
 
         $self->refCompilation->create;
@@ -148,12 +148,11 @@ sub down{
     @services = $self->__getValidServicesOrAll(@services);
 
     # stop services
-    foreach(reverse @services){
-        $self->dockerCommands->stopService($_);
-    }
+    foreach my $service (reverse @services){
 
-    # destroy de building
-    foreach my $service (@services){
+        $self->info("Down of service $service");
+
+        $self->dockerCommands->stopService($service);
 
         $self->eventCommands->fireEventForService(
 

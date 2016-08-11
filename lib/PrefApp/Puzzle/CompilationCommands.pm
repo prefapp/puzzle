@@ -33,7 +33,7 @@ sub allInstalledServices{
     my ($self) = @_;
 
     $self->filterInstalledServices(
-        $self->pieceCommands->validServices
+        $self->pieceCommands->validServices("--sorted")
     );
 }
 
