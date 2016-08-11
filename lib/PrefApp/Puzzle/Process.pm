@@ -135,6 +135,7 @@ sub up{
             @services
         );
 
+        @services;
     }
 
 
@@ -204,6 +205,8 @@ sub __getValidServicesOrAll{
     unless(@services){
         @services = $self->compilationCommands->allInstalledServices();
     }
+
+    @services;
 }
 
 
