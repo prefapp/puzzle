@@ -35,7 +35,7 @@ sub STORABLE_thaw{
     $serialized = thaw $serialized;
 
     $self->env(
-        { %ENV, %{$serialized->{env} || {}} }
+        { %{$serialized->{env} || {}}, %ENV }
     );
 }
 1;
