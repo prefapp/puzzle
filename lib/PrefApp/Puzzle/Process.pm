@@ -58,19 +58,19 @@ sub initialize{
 sub up{
     my ($self, @services) = @_;
 
-    @services = $self->__filterValidServices(@services);
-
-    unless(@services){
-        @services = $self->__servicesList;
-    }
+#    @services = $self->__filterValidServices(@services);
+#
+#    unless(@services){
+#        @services = $self->__servicesList;
+#    }
 
     my $f_in_recompilation;
 
     if($f_in_recompilation = $self->refCompilation->exists){
-        $self->__recompilation(@services);
+        @services = $self->__recompilation(@services);
     }   
     else{
-        $self->__createCompilation(@services);
+        @services = $self->__createCompilation(@services);
     }
 
     $self->saveContext;   
@@ -102,16 +102,27 @@ sub up{
     sub __createCompilation{
         my ($self, @services) = @_;
 
+        @services = $self->__filterValidServices(@services);
+
+        # all services
+        unless(@services){
+            $self->__servicesList;
+        }
+
         $self->refCompilation->create;
 
         # we build the compilation services
         $self->compilationCommands->compileServices(
             @services
         );
+
+        @services;
     }
 
     sub __recompilation{
         my ($self, @services) = @_;
+
+        @services = $self->__getValidServicesOrAll(@services);
 
         foreach(@services){
             unless($self->compilationCommands->isServiceInstalled($_)){
@@ -197,7 +208,7 @@ sub __getValidServicesOrAll{
 
 
 sub __servicesList{
-    $_[0]->pieceCommands->validServices;
+    $_[0]->pieceCommands->validServices("--sorted");
 }
 
 sub __filterValidServices{

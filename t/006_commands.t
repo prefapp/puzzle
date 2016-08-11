@@ -3,7 +3,7 @@ use Test::More;
 
 use File::Path qw(remove_tree);
 
-use PrefApp::Puzzle::Commands;
+use PrefApp::Puzzle::Process;
 
 my $TMP = "/tmp/c_" . int(rand(9999));
 
@@ -13,21 +13,30 @@ eval{
 
     $ENV{PUZZLE_BOX} = "pieces_t2";
 
-    my $c = PrefApp::Puzzle::Commands->new;
+    $ENV{PUZZLE_COMPILATION_PATH} = "$TMP";
 
-    ok(keys(%{$c->validServices}) ==3, "Three valid services");
+    my $p = PrefApp::Puzzle::Process->new(
 
-    my @services_list = $c->c__listValidServices;
+        opts=>{}
 
-    ok($services_list[0] eq 'a' && $services_list[2] eq 'c', "Services are ordered");
+    );
 
-    $c->c__dbPiece($c->c__getPieceForService("a"));
-    $c->c__dbPiece($c->c__getPieceForService("b"));
-    $c->c__dbPiece($c->c__getPieceForService("c"));
+    my @services_list = $p->__servicesList;
 
-    my $db = $c->db;
+    ok(@services_list == 3, "Three valid services");
 
-    ok($db->getSection("b",'foo')->{'a'} == 1, "Related value is correct");
+
+   # my @services_list = $p->c__listValidServices;
+
+   ok($services_list[0] eq 'a' && $services_list[1] eq 'b' && $services_list[2] eq 'c', "Services are ordered");
+
+   # $c->c__dbPiece($c->c__getPieceForService("a"));
+   # $c->c__dbPiece($c->c__getPieceForService("b"));
+   # $c->c__dbPiece($c->c__getPieceForService("c"));
+
+   # my $db = $c->db;
+
+   # ok($db->getSection("b",'foo')->{'a'} == 1, "Related value is correct");
 
     done_testing;
 
