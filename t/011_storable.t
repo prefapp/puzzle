@@ -13,6 +13,7 @@ use PrefApp::Puzzle::PieceEvent;
 eval{
 
     mkdir($TMP);
+    $ENV{HOME} = "$TMP"; 
 
     my $e = PrefApp::Puzzle::Piece->new(
 

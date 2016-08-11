@@ -8,7 +8,9 @@ use PrefApp::Puzzle::Process;
 my $TMP = "/tmp/c_" . int(rand(9999));
 
 eval{
-    
+
+    $ENV{HOME} = "$TMP"; 
+   
     $ENV{PUZZLE_SOURCE_PATH} = "./t/data";
 
     $ENV{PUZZLE_BOX} = "pieces_t2";

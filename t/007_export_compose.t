@@ -9,6 +9,8 @@ my $TMP = "/tmp/c_" . int(rand(9999));
 
 eval{
 
+    $ENV{HOME} = "$TMP"; 
+
     $ENV{PUZZLE_COMPILATION_PATH} = $TMP . '/compilation';    
     $ENV{PUZZLE_SOURCE_PATH} = "./t/data";
 
