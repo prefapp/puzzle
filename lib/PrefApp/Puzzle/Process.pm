@@ -90,6 +90,7 @@ sub up{
 
     $self->saveContext;   
 
+    $self->compilationInfo->serviceIsUp($_) foreach(@services);
 
     # up on the services
     unless($self->opts->{"only-build"}){
@@ -161,6 +162,8 @@ sub down{
         unless($self->refCompilation->exists);
 
     @services = $self->__getValidServicesOrAll(@services);
+
+    $self->compilationInfo->serviceIsDown($_) foreach(@services);
 
     # stop services
     foreach my $service (reverse @services){
@@ -249,4 +252,7 @@ sub saveContext{
     $_[0]->refEnv->store;
 }
 
+sub compilationInfo{
+    $_[0]->refVault->get('compilation_info')
+}
 1;

@@ -11,6 +11,7 @@ use PrefApp::Puzzle::LoaderAddenda;
 
 use PrefApp::Puzzle::EnvCompilation;
 use PrefApp::Puzzle::ServiceCompilationArgs;
+use PrefApp::Puzzle::CompilationInfo;
 
 
 sub LOADER_COMPOSE_CLASS{
@@ -105,6 +106,17 @@ sub loadServicesCompilationArgs{
 
         "PrefApp::Puzzle::ServiceCompilationArgs"
 
+    );
+}
+
+sub loadCompilationInfo{
+    my ($self) = @_;
+
+    $self->createEntity(
+
+        "PrefApp::Puzzle::CompilationInfo",
+
+        t_creation=>time
     );
 }
 

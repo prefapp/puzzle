@@ -17,6 +17,8 @@ use PrefApp::Puzzle::ServiceCompilationArgs;
 
 use PrefApp::Puzzle::EventCommands;
 
+use PrefApp::Puzzle::CompilationInfo;
+
 has(
 
     refEnv=>undef,
@@ -76,6 +78,7 @@ sub boot{
         __bootSetValidServices
         __bootAddenda
         __bootEnvironment
+        __bootCompilationInfo
         __bootServiceCompilationArgs
 
     )){
@@ -137,6 +140,17 @@ sub __bootEnvironment{
     }
     
 }
+
+sub __bootCompilationInfo{
+    my ($self, @args) = @_;
+
+
+    unless($self->vault->get('compilation_info')){
+        $self->loader->loadCompilationInfo;
+    }
+    
+}
+
 
 sub __bootServiceCompilationArgs{
     my ($self, @args) = @_;
