@@ -154,7 +154,7 @@ eval{
     ok(
         &test_command(
 
-            "$COMPOSE_PATH -f $compilation_path/arquitecto/docker-compose.yml stop arquitecto",
+            "$COMPOSE_PATH -f $compilation_path/arquitecto/docker-compose.yml down",
 
             @{shift @command}
 

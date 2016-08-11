@@ -36,6 +36,16 @@ sub psService{
     }
 }
 
+sub downService{
+    my ($self, $service) = @_;
+
+    $self->info("Down service $service");
+
+    $self->__dockerForService($service)->down();
+
+    $self->info("Service $service is down");
+}
+
 sub stopService{
     my ($self, $service) = @_;
 

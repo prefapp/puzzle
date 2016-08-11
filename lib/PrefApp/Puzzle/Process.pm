@@ -152,8 +152,6 @@ sub down{
 
         $self->info("Down of service $service");
 
-        $self->dockerCommands->stopService($service);
-
         $self->eventCommands->fireEventForService(
 
             "on_destroy",
@@ -163,6 +161,8 @@ sub down{
             "--continue"
 
         );
+
+        $self->dockerCommands->downService($service);
 
         $self->compilationCommands->destroyServiceCompilation(
             $service
