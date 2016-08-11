@@ -95,6 +95,32 @@ sub run{
         $self->command_up(@args);
     }
 
+    sub command_export{
+        my ($self, @args) = @_;
+
+        $self->__parseOpts(qw(
+            out=s    
+        ));
+
+        $self->__instantiateCommands->export(
+            @args
+        );
+    }
+
+    sub command_import{
+        my ($self, @args) = @_;
+
+        $self->__parseOpts(qw(
+            save=s    
+        ));
+
+        $self->opts->{importing} = 1;
+
+        $self->__instantiateCommands->importPuzzle(
+            @args
+        );
+    }
+
     sub command_down{
         my ($self, @args) = @_;
 

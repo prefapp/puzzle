@@ -74,6 +74,13 @@ eval{
 
     ok(-f $compilation_path . '/arquitecto/compose_base.yml', "Docker base of arquitecto exists");
 
+
+    ok(
+        $p->compilationInfo->serviceStatus("arquitecto") eq 'up',
+
+        "Compilation info keeps track of services that are up"
+    );
+
     local %ENV = ();
     $ENV{HOME} = $TMP;
 
@@ -150,6 +157,12 @@ eval{
     # let's recompile changing from option
 
     $p->down;
+
+    ok(
+        $p->compilationInfo->serviceStatus("arquitecto") eq 'down',
+
+        "Compilation info keeps track of services that are down"
+    );
 
     ok(
         &test_command(

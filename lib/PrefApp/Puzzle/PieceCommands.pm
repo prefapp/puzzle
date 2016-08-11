@@ -105,21 +105,13 @@ sub listPieces{
 }
 
 sub pieceToService :Sig(self, s){
-    my ($self, $piece_name) = @_;
+    my ($self, $piece_name, $section) = @_;
 
     $self->refDB->loadPiece(
 
         $self->refVault->get($piece_name),
 
-        "self"
+        $section
     );
-
-    $self->refDB->loadPiece(
-
-        $self->refVault->get($piece_name),
-
-        "related"
-    );
-
 }
 1;

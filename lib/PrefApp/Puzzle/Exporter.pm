@@ -4,7 +4,7 @@ use strict;
 use Eixo::Base::Clase 'PrefApp::Puzzle::Base';
 
 use Storable;
-use File::Basename qw(basename);
+use File::Basename qw(basename dirname);
 
 has(
 
@@ -12,7 +12,7 @@ has(
 
 );
 
-sub export :Sig(self, s){
+sub exportPuzzle :Sig(self, s){
     my ($self, $path) = @_;
 
     my $path_exportation;
@@ -34,7 +34,7 @@ sub export :Sig(self, s){
     $self->info("Compilation exported to $path_exportation");
 }
 
-sub import :Sig(self, s){
+sub importPuzzle :Sig(self, s){
     my ($self,$path) = @_;
 
     unless(-f $path){

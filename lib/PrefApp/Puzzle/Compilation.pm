@@ -16,18 +16,22 @@ has(
 
 );
 
+sub PATH_DB{
+    $_[0]->path . '/puzzle.db'
+}
+
 sub exists{
     -d $_[0]->path;
 }
 
 sub getDB{
-    retrieve $_[0]->path . '/puzzle.db';
+    retrieve $_[0]->PATH_DB;
 }
 
 sub createDB :Sig(self, PrefApp::Puzzle::DB){
-    my ($self, $db) = @_;
+    my ($self, $db, $path_to_save) = @_;
 
-    store ($db, $self->path. '/puzzle.db');
+    store ($db, $path_to_save || $_[0]->PATH_DB);
 }
 
 sub listInstalledServices{

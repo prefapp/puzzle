@@ -22,11 +22,15 @@ has(
 );
 
 sub destroyCompilation{
-    my ($self) = @_;
+    my ($self, @opts) = @_;
+
+    return $self->refCompilation->destroy 
+        if(grep {$_ eq '--all'} @_);    
 
     return if($_[0]->allInstalledServices);
 
-    $self->refCompilation->destroy;    
+    $self->refCompilation->destroy 
+
 }
 
 sub allInstalledServices{
@@ -81,7 +85,8 @@ sub compileServices{
     my ($self, @services) = @_;
 
     # we need to create services tables
-    $self->__loadPieceToService($_) foreach(@services);
+    $self->__loadPieceToService($_, "self") foreach(@services);
+    $self->__loadPieceToService($_, "related") foreach(@services);
 
     # we load the addenda if present
     $self->__loadAddenda;
@@ -92,12 +97,14 @@ sub compileServices{
     }
 }
 
-    sub __loadPieceToService :Sig(self, s){
-        my ($self, $service) = @_;
+    sub __loadPieceToService :Sig(self, s,s){
+        my ($self, $service, $section) = @_;
 
         $self->pieceCommands->pieceToService(
             
-            $service  . "_piece"
+            $service  . "_piece",
+
+            $section
         );
     }
 

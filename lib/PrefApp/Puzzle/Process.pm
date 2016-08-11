@@ -4,6 +4,10 @@ use strict;
 use Eixo::Base::Clase 'PrefApp::Puzzle::Base';
 
 use PrefApp::Puzzle::Boot;
+use PrefApp::Puzzle::Exporter;
+
+use PrefApp::Puzzle::Environment;
+use PrefApp::Puzzle::Compilation;
 
 has(
 
@@ -33,7 +37,7 @@ sub initialize{
 
     $self->SUPER::initialize(%args);
 
-    $self->__boot();
+    $self->__boot() unless($self->opts->{importing});
 }
     sub __boot{
         my ($self, %args) = @_;
@@ -88,9 +92,10 @@ sub up{
         @services = $self->__createCompilation(@services);
     }
 
-    $self->saveContext;   
-
     $self->compilationInfo->serviceIsUp($_) foreach(@services);
+
+    $self->saveContext unless($self->opts->{"do-not-save-context"});   
+
 
     # up on the services
     unless($self->opts->{"only-build"}){
@@ -214,6 +219,33 @@ sub task{
     $self->eventCommands->runTaskForService($task, $service);
 }
 
+sub export{
+    my ($self) = @_;
+
+    my $path = $self->opts->{"out"} || "./compilation.puzzle";
+
+#    $self->opts->{"do-not-save-context"} = 1;
+#    $self->opts->{"only-build"} = 1;
+#
+#    # we need to create a build path 
+#    $self->refEnv->puzzle_compilation_path(
+#        "/tmp/compilation_" . int(rand(99999))
+#    );
+#
+#    $self->refCompilation->path($self->refEnv->puzzle_compilation_path);
+#
+#    # now we create a new compilation
+#    $self->up(@services);
+
+    unless($self->refCompilation->exists){
+        $self->error("There is no working compilation");
+    }
+
+    # we export it to the path
+    $self->exporter->exportPuzzle($path);
+}
+
+
 sub __getValidServicesOrAll{
     my ($self, @services) = @_;
 
@@ -255,4 +287,46 @@ sub saveContext{
 sub compilationInfo{
     $_[0]->refVault->get('compilation_info')
 }
+
+sub exporter{
+    
+    PrefApp::Puzzle::Exporter->new(
+
+        refDB=>$_[0]->refDB
+
+    );
+}
+
+sub importPuzzle{
+    my ($self, $path) = @_;
+
+    unless(-f $path){
+        $self->error("Puzzle file \'$path\' does not exist");
+    }
+
+    $self->refEnv(
+        PrefApp::Puzzle::Environment->new()
+    ); 
+    
+    my $output = $self->opts->{save} || $self->refEnv->puzzle_compilation_path; 
+
+    if(-e $output){
+        $self->error("$output exists");
+    }   
+
+    my $db = $self->exporter->importPuzzle($path);
+
+    my $compilation = PrefApp::Puzzle::Compilation->new(
+        path=>$output
+    );
+
+    $compilation->create;
+    $compilation->createDB($db);
+
+    foreach my $service (keys %{$db->entities->{compilation_info}->installed_services}){
+        $compilation->createService($service);
+    }
+
+}
+
 1;
