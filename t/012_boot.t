@@ -23,7 +23,7 @@ eval{
 
         opts=>{
 
-            addenda=>"./t/data/addenda.yml",
+            add=>"./t/data/addenda.yml",
 
             save=>"$TMP/compilation",
 

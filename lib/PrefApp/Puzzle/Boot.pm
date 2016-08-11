@@ -119,11 +119,11 @@ sub __bootSetValidServices{
 sub __bootAddenda{
     my ($self, @args) = @_;
 
-    return undef unless($self->opts->{addenda});
+    return undef unless($self->opts->{add});
 
     $self->loader->loaderAddenda->load(
 
-        $self->opts->{addenda}
+        $self->opts->{add}
     );
 }
 
