@@ -46,6 +46,7 @@ sub run{
             'from=s@',
             'save=s',
             'box=s',
+            'source=s',
             'add=s',
             'rebuild',
             'help',
@@ -53,6 +54,18 @@ sub run{
         );
 
         return $self->__printCommandHelp("up") if($self->opts->{help});
+
+        if(my $source = $self->opts->{source}){
+            $ENV{PUZZLE_SOURCE_PATH} = $source;
+        }
+
+        if(my $path_compilation = $self->opts->{save}){
+            $ENV{PUZZLE_COMPILATION_PATH} = $path_compilation;
+        }
+
+        if(my $box = $self->opts->{box}){
+            $ENV{PUZZLE_BOX} = $box;
+        }
 
         $self->opts->{from} = {
 
