@@ -3,7 +3,7 @@ use Test::More;
 
 use File::Path qw(remove_tree);
 
-use PrefApp::Puzzle::Commands;
+use PrefApp::Puzzle::Process;
 
 my $TMP = "/tmp/c_" . int(rand(9999));
 
@@ -14,9 +14,15 @@ eval{
 
     $ENV{PUZZLE_BOX} = "pieces_dev";
 
-    my $c = PrefApp::Puzzle::Commands->new;
+    my $c = PrefApp::Puzzle::Process->new(
 
-    $c->up("arquitecto", '--only-build');
+        opts=>{
+            "only-build" => 1,
+        }
+
+    );
+
+    $c->up("arquitecto");
 
     ok(-d $ENV{PUZZLE_COMPILATION_PATH}, "Compilation directory created");
 

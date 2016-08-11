@@ -7,6 +7,7 @@ use File::Path qw(remove_tree);
 my $TMP = "/tmp/c_" . int(rand(9999));
 
 use PrefApp::Puzzle::Piece;
+use PrefApp::Puzzle::Compose;
 use PrefApp::Puzzle::PieceEvent;
 
 eval{
@@ -16,6 +17,8 @@ eval{
     my $e = PrefApp::Puzzle::Piece->new(
 
         service=>"foo",
+
+        compose=>PrefApp::Puzzle::Compose->new(referer=>"foo"),
 
         events=>{
 

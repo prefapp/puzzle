@@ -4,7 +4,7 @@ use Test::More;
 
 use File::Path qw(remove_tree);
 
-use PrefApp::Puzzle::Commands;
+use PrefApp::Puzzle::Process;
 use PrefApp::Puzzle::DockerCompose;
 
 my $TMP = "/tmp/c_" . int(rand(9999));
@@ -28,22 +28,30 @@ eval{
     $ENV{PUZZLE_SOURCE_PATH} = "./t/data";
 
     $ENV{PUZZLE_BOX} = "pieces_dev";
-    $ENV{HOME} = $TMP . '/.puzzle';
+    $ENV{HOME} = $TMP;
 
     $ENV{A} = "a";
     $ENV{B} = "b";
     $ENV{C} = "c";
 
-    my $c = PrefApp::Puzzle::Commands->new;
+    my $c = PrefApp::Puzzle::Process->new(
 
-    $c->up("arquitecto", '--only-build');
+        opts=>{
+            "only-build" => 1,
+        }
+
+    );
+
+    $c->up("arquitecto");
  
-    my $l = $c->c__dockerForService('arquitecto');
+    my $l = $c->dockerCommands
+
+                ->__dockerForService('arquitecto');
 
     ok($l->env->{A} eq 'a' && $l->env->{B} eq 'b', "Environment is correctly stored");
 
     $l->up;
-    print Dumper($comandos[0]);
+ #   print Dumper($comandos[0]);
 
     @comandos = ();
 
@@ -54,18 +62,25 @@ eval{
     $ENV{PUZZLE_SOURCE_PATH} = "./t/data";
 
     $ENV{PUZZLE_BOX} = "pieces_dev";
-    $ENV{HOME} = $TMP . '/.puzzle';
+    $ENV{HOME} = $TMP;
     
-    $c = PrefApp::Puzzle::Commands->new;
+    $c = PrefApp::Puzzle::Process->new(
 
-    $c->up("arquitecto", '--only-build');
+        opts=>{
+            "only-build" => 1,
+        }
+    );
+
+    $c->up("arquitecto");
  
-    $l = $c->c__dockerForService('arquitecto');
+    $l = $c->dockerCommands
+
+                ->__dockerForService('arquitecto');
 
     ok($l->env->{A} eq 'z' && $l->env->{B} eq 'b', "Environment is correctly rewritten");
 
     $l->up;
-    print Dumper($comandos[0]);
+    #print Dumper($comandos[0]);
 
     done_testing;
 
