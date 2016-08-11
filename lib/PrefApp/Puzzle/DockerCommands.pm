@@ -15,6 +15,16 @@ has(
 
 );
 
+sub pullService{
+    my ($self, $service) = @_;
+
+    $self->info("Pulling images from service $service");
+
+    $self->__dockerForService($service)->composePull;
+
+    $self->info("Images from $service pulled");
+}
+
 sub upService{
     my ($self, $service) = @_;
     

@@ -55,6 +55,21 @@ sub initialize{
         $self->eventCommands($boot->eventCommands);
     }
 
+sub reload{
+    my ($self, @services) = @_;
+
+    @services = $self->__getValidServicesOrAll(@services);
+
+    $self->error("There is no working compilation") 
+        unless($self->refCompilation->exists);
+
+    foreach my $service (@services){
+        $self->dockerCommands->pullService($service);
+    }
+
+    $self->up(@services);
+}
+
 sub up{
     my ($self, @services) = @_;
 

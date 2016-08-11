@@ -193,6 +193,18 @@ sub __printCommandHelp{
 
 __DATA__
 
+@@reload
+
+Usage: puzzle reload (service1 service2...) [OPTIONS]
+
+Pulls images from a service or services and the up
+
+   --save           Save compilation to the specified location
+   --from           Attachs a directory as the project working dir
+   --only-build     Just creates the compilation
+   --add            Use an addenda for the compilation
+   --help           Prints this help
+
 @@up
 
 Usage: puzzle up (service1 service2...) [OPTIONS]
