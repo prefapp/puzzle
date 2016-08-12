@@ -134,7 +134,7 @@ sub up{
 
         # we build the compilation services
         $self->compilationCommands->compileServices(
-            @services
+            \@services
         );
 
         @services;
@@ -145,6 +145,7 @@ sub up{
 
         @services = $self->__getValidServicesOrAll(@services);
 
+
         foreach(@services){
             unless($self->compilationCommands->isServiceInstalled($_)){
                 $self->error("service $_ is not installed on this compilation");
@@ -153,8 +154,9 @@ sub up{
 
         # we build the compilation services
         $self->compilationCommands->recompileServices(
-            @services
+            @services,
         );
+
 
         @services;
     }

@@ -78,15 +78,27 @@ sub recompileServices{
         $self->refCompilation->deleteService($service);
     }
 
-    $self->compileServices(@services);
+    my %services_dependencies = map { $_ => 1 } @services;
+
+    my @services_dependencies = grep { !exists $services_dependencies{$_}}
+        $self->allInstalledServices;
+
+    $self->compileServices(\@services, \@services_dependencies);
 }
 
 sub compileServices{
-    my ($self, @services) = @_;
+    my ($self, $services, $services_dependencies) = @_;
+
+    my @services = @$services;
 
     # we need to create services tables
     $self->__loadPieceToService($_, "self") foreach(@services);
     $self->__loadPieceToService($_, "related") foreach(@services);
+
+    # we load services dependencies
+    if($services_dependencies){
+        $self->__loadPieceToService($_, "related") foreach(@$services_dependencies);
+    }
 
     # we load the addenda if present
     $self->__loadAddenda;
