@@ -218,6 +218,10 @@ sub task{
         $self->error("There is no working compilation");
     }
 
+    unless($self->compilationCommands->isServiceInstalled($service)){
+        $self->error("Service $service is not installed");
+    }
+
     $self->eventCommands->runTaskForService($task, $service);
 }
 
