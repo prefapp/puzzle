@@ -25,7 +25,14 @@ sub __load{
     my ($self, $service, %args) = @_;
 
     # first we load the file of the piece
-    my $data = $self->__loadPieceData($service, $args{box});
+    my $data;
+    
+    eval{
+        $data = $self->__loadPieceData($service, $args{box});
+    };
+    if($@){
+        $self->fatal("Loading $service piece: " . $@);
+    }
 
     # we create the piece
     my $piece = $self->createEntity(

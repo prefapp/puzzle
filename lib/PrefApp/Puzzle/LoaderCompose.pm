@@ -17,7 +17,13 @@ sub __load{
     my ($self, $service, $name, %args) = @_;
 
     # first we load the file of the piece
-    my $data = $self->__loadComposeData($name);
+    my $data;
+    eval{
+        $data  = $self->__loadComposeData($name);
+    };
+    if($@){
+        $self->fatal("Loading compose $name : " . $@);
+    }
 
     # we create the piece
     my $compose = $self->createEntity(
