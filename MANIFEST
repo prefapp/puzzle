@@ -1,3 +1,4 @@
+a.pl
 bin/puzzle
 Changes
 cpanfile
@@ -23,6 +24,7 @@ lib/PrefApp/Puzzle/Environment.pm
 lib/PrefApp/Puzzle/EventCommands.pm
 lib/PrefApp/Puzzle/Exporter.pm
 lib/PrefApp/Puzzle/Images.pm
+lib/PrefApp/Puzzle/InfoCommands.pm
 lib/PrefApp/Puzzle/Loader.pm
 lib/PrefApp/Puzzle/LoaderAddenda.pm
 lib/PrefApp/Puzzle/LoaderCompose.pm
