@@ -1,4 +1,3 @@
-a.pl
 bin/puzzle
 Changes
 cpanfile
@@ -7,7 +6,6 @@ lib/PrefApp/Puzzle/Addenda.pm
 lib/PrefApp/Puzzle/AttributeFinder.pm
 lib/PrefApp/Puzzle/Base.pm
 lib/PrefApp/Puzzle/Boot.pm
-lib/PrefApp/Puzzle/Commands.pm
 lib/PrefApp/Puzzle/Compilation.pm
 lib/PrefApp/Puzzle/CompilationCommands.pm
 lib/PrefApp/Puzzle/CompilationInfo.pm
@@ -45,7 +43,7 @@ lib/PrefApp/Puzzle/TaskRunner.pm
 lib/PrefApp/Puzzle/Vault.pm
 lib/PrefApp/Puzzle/YAML.pm
 Makefile.PL
-MANIFEST
+MANIFEST			This list of files
 README.md
 t/000_compile.t
 t/001_base.t
@@ -55,7 +53,6 @@ t/004_compilation.t
 t/005_env.t
 t/006_commands.t
 t/007_export_compose.t
-t/008_list_images.t
 t/008_list_images.t.off
 t/010_env_host.t
 t/011_storable.t
