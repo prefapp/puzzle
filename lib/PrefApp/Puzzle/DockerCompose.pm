@@ -127,6 +127,8 @@ sub down{
         $self->{path},
 
         "down",
+
+        "-v"
     );
 }
 
