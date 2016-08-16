@@ -53,7 +53,9 @@ sub run{
             'only-build',
         );
 
-        return $self->__printCommandHelp("up") if($self->opts->{help});
+        my $up_command = $self->{command} || "up";
+
+        return $self->__printCommandHelp($up_command) if($self->opts->{help});
 
         if(my $source = $self->opts->{source}){
             $ENV{PUZZLE_SOURCE_PATH} = $source;
@@ -78,7 +80,6 @@ sub run{
             } @{$_[0]->opts->{from} || []}
         };
 
-        my $up_command = $self->{command} || "up";
 
         $self->__instantiateCommands->$up_command(
 
@@ -123,6 +124,12 @@ sub run{
 
     sub command_down{
         my ($self, @args) = @_;
+
+        $self->__parseOpts(qw(
+            help
+        ));
+
+        return $self->__printCommandHelp("up") if($self->opts->{help});
 
         $self->__instantiateCommands->down(
             @args
@@ -252,3 +259,11 @@ Run <task_name> in a new service <service> container
 
    --arg            Argument to pass to task (can be declared multiple times)
    --help           Prints this help
+
+@@info
+
+Usage: puzzle info (service1 service2 ...) [OPTIONS]
+
+Shows information about conf and other parameters about services
+
+
