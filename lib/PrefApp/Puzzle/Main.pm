@@ -241,6 +241,7 @@ Creates/recreates a set of puzzle services
    --from           Attachs a directory as the project working dir
    --only-build     Just creates the compilation
    --add            Use an addenda for the compilation
+   --rebuild        Recompilates services by reading the pieces and base composes anew
    --help           Prints this help
 
 @@task
