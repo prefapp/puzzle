@@ -29,6 +29,8 @@ has(
 
     eventCommands=>undef,
 
+    infoCommands=>undef,
+
     opts=>undef,
 );
 
@@ -56,6 +58,7 @@ sub initialize{
         $self->pieceCommands($boot->pieceCommands);
         $self->compilationCommands($boot->compilationCommands);
         $self->dockerCommands($boot->dockerCommands);
+        $self->infoCommands($boot->infoCommands);
         $self->eventCommands($boot->eventCommands);
     }
 
@@ -249,6 +252,20 @@ sub export{
 
     # we export it to the path
     $self->exporter->exportPuzzle($path);
+}
+
+sub infoPuzzle{
+    my ($self, @services) = @_;
+
+    unless($self->refCompilation->exists){
+        $self->error("There is no working compilation");
+    }
+
+    @services = $self->__getValidServicesOrAll(@services);
+
+    $self->compilationCommands->compileForInfo();
+
+    $self->infoCommands->infoService($_) foreach(@services);
 }
 
 

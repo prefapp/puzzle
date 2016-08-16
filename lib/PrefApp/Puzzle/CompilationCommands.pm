@@ -70,6 +70,16 @@ sub destroyServiceCompilation{
     $self->refCompilation->deleteService($service);
 }
 
+sub compileForInfo{
+    my ($self) = @_;
+
+    my @services = $self->allInstalledServices;    
+
+    $self->__loadPieceToService($_, "self") foreach(@services);
+    $self->__loadPieceToService($_, "related") foreach(@services);
+    $self->__loadAddenda;
+}
+
 sub recompileServices{
     my ($self, @services) = @_;
 

@@ -16,6 +16,7 @@ use PrefApp::Puzzle::EnvCompilation;
 use PrefApp::Puzzle::ServiceCompilationArgs;
 
 use PrefApp::Puzzle::EventCommands;
+use PrefApp::Puzzle::InfoCommands;
 
 use PrefApp::Puzzle::CompilationInfo;
 
@@ -220,6 +221,19 @@ sub eventCommands{
 
         dockerCommands=>$_[0]->dockerCommands
     )
+}
+
+sub infoCommands{
+
+    return PrefApp::Puzzle::InfoCommands->new(
+
+
+        refDB=>$_[0]->refDB,
+
+        refVault=>$_[0]->vault
+
+    );
+
 }
 
 sub loader{

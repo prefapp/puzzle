@@ -172,6 +172,22 @@ sub run{
         
     }
 
+    sub command_info{
+        my ($self, @services) = @_;
+
+        $self->__parseOpts(
+
+            "help",
+        );
+
+        return $self->__printCommandHelp("info") if($self->opts->{help});
+
+        $self->__instantiateCommands->infoPuzzle(
+            
+            @services
+        );
+    }
+
 sub __instantiateCommands{
     
     PrefApp::Puzzle::Process->new(
