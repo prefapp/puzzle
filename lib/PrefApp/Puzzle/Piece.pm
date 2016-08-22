@@ -14,8 +14,26 @@ has(
     events=>{},
 );
 
+sub FREEZE_KEYS{
+    $_[0]->SUPER::FREEZE_KEYS, 
+    qw(
+        data
+        tasks
+        events
+        compose
+    )
+}
+
 sub BUILD_ALIAS{
     $_[0]->service . '_piece' 
+}
+
+sub validateThaw{
+    my ($self) = @_;
+
+    unless($self->compose){
+        $self->fatal($self->alias . ' has not compose information');
+    }
 }
 
 sub getApplicationContainers{
@@ -32,6 +50,10 @@ sub exports{
 
 sub related{
     $_[0]->data->{related} || {};
+}
+
+sub weight{
+    $_[0]->data->{weight};
 }
 
 sub getTasksFor :Sig(self, s){ 

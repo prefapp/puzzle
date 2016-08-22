@@ -12,6 +12,14 @@ has(
 
 );
 
+sub FREEZE_KEYS{
+    $_[0]->SUPER::FREEZE_KEYS,
+    qw(
+        name
+        data
+    )
+}
+
 sub BUILD_ALIAS{
     "addenda"
 }

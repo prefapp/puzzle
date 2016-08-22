@@ -13,6 +13,16 @@ has(
     
 );
 
+sub FREEZE_KEYS{
+    $_[0]->SUPER::FREEZE_KEYS,
+
+    qw(
+        referer
+        label
+        tasks
+    )
+}
+
 sub BUILD_ALIAS{
     join('_', $_[0]->referer, $_[0]->label, "tasks");
 }

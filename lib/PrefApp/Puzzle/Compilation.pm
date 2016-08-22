@@ -6,6 +6,8 @@ use File::Path qw(make_path remove_tree);
 
 use JSON::XS;
 
+use Storable;
+
 has(
 
     path=>undef,
@@ -13,6 +15,30 @@ has(
     validServices=>[],
 
 );
+
+sub PATH_DB{
+    $_[0]->path . '/puzzle.db'
+}
+
+sub exists{
+    -d $_[0]->path;
+}
+
+sub getDB{
+    retrieve $_[0]->PATH_DB;
+}
+
+sub createDB :Sig(self, PrefApp::Puzzle::DB){
+    my ($self, $db, $path_to_save) = @_;
+
+    store ($db, $path_to_save || $_[0]->PATH_DB);
+}
+
+sub listInstalledServices{
+    grep {
+        $_[0]->serviceInstalled;
+    } $_[0]->getServices
+}
 
 sub serviceInstalled{
     $_[0]->__isServiceInstalled($_[1])

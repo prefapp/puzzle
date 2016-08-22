@@ -7,9 +7,13 @@ use PrefApp::Puzzle::Vault;
 use PrefApp::Puzzle::Piece;
 use PrefApp::Puzzle::LoaderPiece;
 use PrefApp::Puzzle::AttributeFinder;
+use PrefApp::Puzzle::DB;
 
 
-my $vault = PrefApp::Puzzle::Vault->new;
+my $vault = PrefApp::Puzzle::Vault->new(
+
+    refDB=>PrefApp::Puzzle::DB->new
+);
 
 my $piece = PrefApp::Puzzle::LoaderPiece->new(
 

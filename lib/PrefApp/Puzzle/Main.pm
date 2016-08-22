@@ -8,7 +8,7 @@ use Eixo::Base::Data;
 use Getopt::Long;
 
 use PrefApp::Puzzle;
-use PrefApp::Puzzle::Commands;
+use PrefApp::Puzzle::Process;
 
 my $HELP_COMMANDS = &Eixo::Base::Data::getDataBySections(__PACKAGE__);
 
@@ -46,12 +46,28 @@ sub run{
             'from=s@',
             'save=s',
             'box=s',
+            'source=s',
             'add=s',
+            'rebuild',
             'help',
             'only-build',
         );
 
-        return $self->__printCommandHelp("up") if($self->opts->{help});
+        my $up_command = $self->{command} || "up";
+
+        return $self->__printCommandHelp($up_command) if($self->opts->{help});
+
+        if(my $source = $self->opts->{source}){
+            $ENV{PUZZLE_SOURCE_PATH} = $source;
+        }
+
+        if(my $path_compilation = $self->opts->{save}){
+            $ENV{PUZZLE_COMPILATION_PATH} = $path_compilation;
+        }
+
+        if(my $box = $self->opts->{box}){
+            $ENV{PUZZLE_BOX} = $box;
+        }
 
         $self->opts->{from} = {
 
@@ -64,13 +80,12 @@ sub run{
             } @{$_[0]->opts->{from} || []}
         };
 
-        my $up_command = $self->{command} || "up";
 
         $self->__instantiateCommands->$up_command(
 
             @args
 
-        )->end;
+        );
     }
 
     sub command_reload{
@@ -81,8 +96,40 @@ sub run{
         $self->command_up(@args);
     }
 
+    sub command_export{
+        my ($self, @args) = @_;
+
+        $self->__parseOpts(qw(
+            out=s    
+        ));
+
+        $self->__instantiateCommands->export(
+            @args
+        );
+    }
+
+    sub command_import{
+        my ($self, @args) = @_;
+
+        $self->__parseOpts(qw(
+            save=s    
+        ));
+
+        $self->opts->{importing} = 1;
+
+        $self->__instantiateCommands->importPuzzle(
+            @args
+        );
+    }
+
     sub command_down{
         my ($self, @args) = @_;
+
+        $self->__parseOpts(qw(
+            help
+        ));
+
+        return $self->__printCommandHelp("up") if($self->opts->{help});
 
         $self->__instantiateCommands->down(
             @args
@@ -125,9 +172,25 @@ sub run{
         
     }
 
+    sub command_info{
+        my ($self, @services) = @_;
+
+        $self->__parseOpts(
+
+            "help",
+        );
+
+        return $self->__printCommandHelp("info") if($self->opts->{help});
+
+        $self->__instantiateCommands->infoPuzzle(
+            
+            @services
+        );
+    }
+
 sub __instantiateCommands{
     
-    PrefApp::Puzzle::Commands->new(
+    PrefApp::Puzzle::Process->new(
         opts=>$_[0]->opts
     )
 }
@@ -179,6 +242,18 @@ sub __printCommandHelp{
 
 __DATA__
 
+@@reload
+
+Usage: puzzle reload (service1 service2...) [OPTIONS]
+
+Pulls images from a service or services and the up
+
+   --save           Save compilation to the specified location
+   --from           Attachs a directory as the project working dir
+   --only-build     Just creates the compilation
+   --add            Use an addenda for the compilation
+   --help           Prints this help
+
 @@up
 
 Usage: puzzle up (service1 service2...) [OPTIONS]
@@ -189,6 +264,7 @@ Creates/recreates a set of puzzle services
    --from           Attachs a directory as the project working dir
    --only-build     Just creates the compilation
    --add            Use an addenda for the compilation
+   --rebuild        Recompilates services by reading the pieces and base composes anew
    --help           Prints this help
 
 @@task
@@ -199,3 +275,11 @@ Run <task_name> in a new service <service> container
 
    --arg            Argument to pass to task (can be declared multiple times)
    --help           Prints this help
+
+@@info
+
+Usage: puzzle info (service1 service2 ...) [OPTIONS]
+
+Shows information about conf and other parameters about services
+
+

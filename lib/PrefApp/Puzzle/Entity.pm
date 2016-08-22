@@ -3,6 +3,8 @@ package PrefApp::Puzzle::Entity;
 use strict;
 use Eixo::Base::Clase 'PrefApp::Puzzle::Base';
 
+use Storable qw(freeze thaw);
+
 has(
 
     service=>undef,
@@ -12,6 +14,13 @@ has(
     refVault=>undef,   
 
 );
+
+sub FREEZE_KEYS {
+    qw(
+        service
+        alias
+    )
+}
 
 sub BUILD_ALIAS :Abstract {}
 
@@ -36,5 +45,36 @@ sub create{
 
     $self;
 }
+
+sub validateThaw    {}
+
+sub STORABLE_freeze{
+    my ($self, $cloning, @keys) = @_;
+    
+    return if($cloning);    
+    
+    return freeze({
+        map {
+            $_ => $self->{$_}
+        } $self->FREEZE_KEYS
+    })
+
+}
+
+sub STORABLE_thaw{
+    my ($self, $cloning, $serialized, @keys) = @_;
+
+    $serialized = thaw($serialized);
+
+    foreach($self->FREEZE_KEYS){
+
+        $self->{$_} = $serialized->{$_};
+    }
+
+    $self->validateThaw;
+
+    $self;
+}
+
 
 1;

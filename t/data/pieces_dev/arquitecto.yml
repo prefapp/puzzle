@@ -19,18 +19,14 @@ exports:
     arquitecto_minions: 
       MINIONS_NUMERO: 1
 
-tareas:
+tasks:
 
   instalar: 
-    - 
-      contenedor: "arquitecto"
-      tareas: 
-        - "tarea instalar ruta_apps=https://github.com/prefapp/planos/archive/master.zip"
-        - "tarea migrar_bd"
+    "arquitecto":
+        - "tarea foo1"
+        - "tarea foo2"
 
   actualizar:
-    -
-      contenedor: "arquitecto"
-      tareas:
+      "arquitecto":
         - "tarea migrar_bd"
         - "tarea insertar_apps ruta_apps=https://github.com/prefapp/planos/archive/master.zip"

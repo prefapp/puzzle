@@ -66,7 +66,9 @@ sub store{
 
     my %data = %{$_[0]};
 
-    open F, '>', $_[0]->PATH;
+    open (F, '>', $_[0]->PATH) || $_[0]->fatal(
+        "Couldn't open path for env storage: $!"
+    );
     print F JSON::XS->new->encode(\%data);
     close F;
 }

@@ -12,8 +12,20 @@ has(
     data=>{},
 
     constructions=>{}
-
 );
+
+sub FREEZE_KEYS{
+
+    $_[0]->SUPER::FREEZE_KEYS,
+
+    qw(
+
+        path
+        referer
+        data
+        constructions
+    )
+}
 
 sub BUILD_ALIAS{
     $_[0]->referer . '_compose' 

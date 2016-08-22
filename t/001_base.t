@@ -23,6 +23,6 @@ use_ok("PrefApp::Puzzle::LoaderComposeConstruction");
 
 use_ok("PrefApp::Puzzle::AttributeFinder");
 
-use_ok("PrefApp::Puzzle::Commands");
+#use_ok("PrefApp::Puzzle::Commands");
 
 done_testing;
