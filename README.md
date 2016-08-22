@@ -85,7 +85,7 @@ To install :
 ``` cpanfile --installdeps .```
 
 * Needs **make** and **gcc**  
-``` sudo apt-get install make gcc```
+``` sudo apt-get install make gcc  libc6-dev```
 
 ##COPYRIGHT AND LICENCE
 
