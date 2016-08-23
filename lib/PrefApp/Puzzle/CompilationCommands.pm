@@ -27,7 +27,9 @@ sub destroyCompilation{
     return $self->refCompilation->destroy 
         if(grep {$_ eq '--all'} @_);    
 
-    return if($_[0]->allInstalledServices);
+    my @installed_services = $self->allInstalledServices;    
+
+    return if(@installed_services > 0);
 
     $self->refCompilation->destroy 
 
