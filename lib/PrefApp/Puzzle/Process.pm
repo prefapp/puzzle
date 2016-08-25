@@ -295,6 +295,70 @@ sub export{
     $self->exporter->exportPuzzle($path);
 }
 
+sub start{
+    my ($self, @services) = @_;
+
+    unless($self->refCompilation->exists){
+        $self->error("There is no working compilation");
+    }
+
+    my (%services) = $self->__splitInstalledServicesAndContainers(@services);
+
+    foreach my $service (keys(%services)){
+
+        if($services{$service} eq 'all'){
+            $self->dockerCommands->startService($service);
+        }
+        else{
+            $self->dockerCommands->startServiceContainers($service, @{$services{$service}})
+        }
+    }
+}
+
+sub stop{
+    my ($self, @services) = @_;
+
+    unless($self->refCompilation->exists){
+        $self->error("There is no working compilation");
+    }
+
+    my (%services) = $self->__splitInstalledServicesAndContainers(@services);
+
+    foreach my $service (keys(%services)){
+
+        if($services{$service} eq 'all'){
+            $self->dockerCommands->stopService($service);
+        }
+        else{
+            $self->dockerCommands->stopServiceContainers($service, @{$services{$service}})
+        }
+    }
+}
+
+    sub __splitInstalledServicesAndContainers{
+        my ($self, @services) = @_;
+
+        my (%services) = map {
+
+            my ($service, $containers) = split(/\:/, $_);
+
+            ($containers) ? 
+
+                ($service => [split(/\,/, $containers)]) :
+
+                ($service => "all")
+
+        } grep {
+
+            my ($service) = $_ =~ /^(\w+)\:?/;
+
+            $self->compilationCommands->isServiceInstalled($service)
+
+        } @services;
+
+        return %services;
+    }
+
 sub infoPuzzle{
     my ($self, @services) = @_;
 

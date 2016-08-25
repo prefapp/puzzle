@@ -235,6 +235,40 @@ sub run{
 
             @args
         );
+
+    sub command_start{
+        my ($self,@services) = @_;
+
+        $self->__parseOpts(
+    
+            "help"
+
+        );
+
+        return $self->__printCommandHelp("start") if($self->opts->{help});
+
+        $self->__instantiateCommands->start(
+            
+            @services
+        );
+    }
+
+    sub command_stop{
+        my ($self,@services) = @_;
+
+        $self->__parseOpts(
+    
+            "help"
+
+        );
+
+        return $self->__printCommandHelp("stop") if($self->opts->{help});
+
+        $self->__instantiateCommands->stop(
+            
+            @services
+        );
+
     }
 
 sub __instantiateCommands{
@@ -309,6 +343,19 @@ sub __printCommandHelp{
 1;
 
 __DATA__
+
+@@start
+
+Usage: puzzle start (service1|service1:container1,container2 service2...) [OPTIONS]
+
+Starts all or several containers of a service or services
+
+@@stop
+
+Usage: puzzle stop (service1|service1:container1,container2 service2...) [OPTIONS]
+
+Stops all or several containers of a service or services
+
 
 @@update
 
