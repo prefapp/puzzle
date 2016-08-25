@@ -127,9 +127,10 @@ sub run{
 
         $self->__parseOpts(qw(
             help
+            destroy
         ));
 
-        return $self->__printCommandHelp("up") if($self->opts->{help});
+        return $self->__printCommandHelp("down") if($self->opts->{help});
 
         $self->__instantiateCommands->down(
             @args
@@ -283,3 +284,10 @@ Usage: puzzle info (service1 service2 ...) [OPTIONS]
 Shows information about conf and other parameters about services
 
 
+@@down
+
+Usage: puzzle down (service1 service ...) [OPTIONS]
+
+Performs a down over a list of services 
+
+    --destroy   Destroys the compilation 

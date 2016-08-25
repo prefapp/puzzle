@@ -193,12 +193,14 @@ sub down{
         $self->dockerCommands->downService($service);
 
         $self->compilationCommands->destroyServiceCompilation(
+
             $service
-        );
+
+        ) if($self->opts->{destroy});
     }
 
     # destroy de compilation if there are no remain services
-    $self->compilationCommands->destroyCompilation();
+    $self->compilationCommands->destroyCompilation() if($self->opts->{destroy});
 }
 
 sub ps{
