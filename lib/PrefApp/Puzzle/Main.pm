@@ -100,8 +100,11 @@ sub run{
         my ($self, @args) = @_;
 
         $self->__parseOpts(qw(
+            help
             out=s    
         ));
+
+        return $self->__printCommandHelp("export") if($self->opts->{help});
 
         $self->__instantiateCommands->export(
             @args
@@ -112,8 +115,11 @@ sub run{
         my ($self, @args) = @_;
 
         $self->__parseOpts(qw(
+            help
             save=s    
         ));
+
+        return $self->__printCommandHelp("import") if($self->opts->{help});
 
         $self->opts->{importing} = 1;
 
@@ -140,6 +146,12 @@ sub run{
 
     sub command_ps{
         my ($self, @args) = @_;
+
+        $self->__parseOpts(qw(
+            help
+        ));
+
+        return $self->__printCommandHelp("ps") if($self->opts->{help});
     
         $self->__instantiateCommands->ps(
             @args
@@ -291,3 +303,26 @@ Usage: puzzle down (service1 service ...) [OPTIONS]
 Performs a down over a list of services 
 
     --destroy   Destroys the compilation 
+
+@@ps
+
+Usage: puzzle ps (service1 service2...) 
+
+Performs a ps over a list of services
+
+@@import
+
+Usage: puzzle import path
+
+Imports an exported puzzle database to create a compilation
+
+    --save      Saves the compilation in the path established
+
+@@export
+
+Usage: puzzle export 
+
+Exports a compilation to a puzzle database (defaults to ./compilation.puzzle)
+
+    --out       Saves the exported database in the path/name specified
+
