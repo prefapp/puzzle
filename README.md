@@ -62,6 +62,16 @@ tasks:
 
 ```
 
+## Addendas
+
+Addendas allow the ability to reconfigure pieces from another config file (addenda). 
+Override or complete params from one or several pieces but isn't a service representation.
+Only has the **exports** section, where is detailed the parameters that wich wants reconfigure, of 1-N pieces.
+
+Addendas are added at the end, so its configurations override any other.
+
+To use an addenda when you are creating a new environment:
+``` puzzle up --add <path to addenda file relative to PUZZLE_SOURCE_PATH>```
 
 
 ##DEPENDENCIES
