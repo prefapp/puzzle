@@ -17,6 +17,21 @@ Commands:
     
 ```
 
+### puzzle up <service list> <options>
+Create a new environment with the list of services specified. If no service is specified all services in box path are used. 
+####Options:
+- **--save**: Save compilation to the specified location
+- **--from**: Attachs a directory as the project working dir
+- **--only-build**: Just creates the compilation
+- **--add**: Use an addenda for the compilation
+   
+### puzzle down <service list> <option>
+Drop service list containers. If no service is specified all services in environment are affected.
+
+####Options:
+- **--destroy**: Fully destroy the service list / compilation so the containers associated can be created again with the parameteres specified (a new compilation must be defined)
+
+
 ## Config
 
   - **PUZZLE_SOURCE_PATH**: Base path where puzzle can locate compose files and pieces to process
@@ -62,6 +77,17 @@ tasks:
 
 ```
 
+## Addendas
+
+Addendas allow the ability to reconfigure pieces from another config file (addenda). 
+Override or complete params from one or several pieces but isn't a service representation.
+Only has the **exports** section, where is detailed the parameters that wich wants reconfigure, of 1-N pieces.
+
+Addendas are added at the end, so its configurations override any other.
+
+To use an addenda when you are creating a new environment:  
+
+``` puzzle up --add <path to addenda file relative to PUZZLE_SOURCE_PATH>```
 
 
 ##DEPENDENCIES
