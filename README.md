@@ -70,7 +70,8 @@ Only has the **exports** section, where is detailed the parameters that wich wan
 
 Addendas are added at the end, so its configurations override any other.
 
-To use an addenda when you are creating a new environment:
+To use an addenda when you are creating a new environment:  
+
 ``` puzzle up --add <path to addenda file relative to PUZZLE_SOURCE_PATH>```
 
 
