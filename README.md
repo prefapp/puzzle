@@ -17,6 +17,21 @@ Commands:
     
 ```
 
+### puzzle up <service list> <options>
+Create a new environment with the list of services specified. If no service is specified all services in box path are used. 
+####Options:
+- **--save**: Save compilation to the specified location
+- **--from**: Attachs a directory as the project working dir
+- **--only-build**: Just creates the compilation
+- **--add**: Use an addenda for the compilation
+   
+### puzzle down <service list> <option>
+Drop service list containers. If no service is specified all services in environment are affected.
+
+####Options:
+- **--destroy**: Fully destroy the service list / compilation so the containers associated can be created again with the parameteres specified (a new compilation must be defined)
+
+
 ## Config
 
   - **PUZZLE_SOURCE_PATH**: Base path where puzzle can locate compose files and pieces to process
