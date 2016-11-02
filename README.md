@@ -108,7 +108,7 @@ View cpanfile.
 
 To install :
 
-``` cpanfile --installdeps .```
+``` cpanm --installdeps .```
 
 * Needs **make** and **gcc**  
 ``` sudo apt-get install make gcc  libc6-dev```
