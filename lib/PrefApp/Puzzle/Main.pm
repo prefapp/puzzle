@@ -201,6 +201,20 @@ sub run{
         );
     }
 
+    sub command_generate{
+        my ($self, @args) = @_;
+
+        $self->__parseOpts(
+            "help"
+        );
+
+        return $self->__printCommandHelp("generate") if($self->opts->{help});
+
+        return $self->__instantiateCommands->generate(
+            @args
+        );
+    }
+
 sub __instantiateCommands{
     
     PrefApp::Puzzle::Process->new(
@@ -326,3 +340,11 @@ Exports a compilation to a puzzle database (defaults to ./compilation.puzzle)
 
     --out       Saves the exported database in the path/name specified
 
+@@generate
+
+Usage: puzzle generate
+
+Creates templates for different purposes
+
+    piece     Creates a piece's template
+    project   Creates a structure for a project

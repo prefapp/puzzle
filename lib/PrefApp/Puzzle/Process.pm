@@ -9,6 +9,8 @@ use PrefApp::Puzzle::Exporter;
 use PrefApp::Puzzle::Environment;
 use PrefApp::Puzzle::Compilation;
 
+use PrefApp::Puzzle::Generator;
+
 has(
 
     refVault=>undef,
@@ -352,6 +354,25 @@ sub importPuzzle{
         $compilation->createService($service);
     }
 
+}
+
+sub generate{
+    my ($self, $type, @args) = @_;
+
+    if($type eq 'project'){
+
+        my ($name, $path) = @args;
+
+        if(!$name){
+
+            $self->error("puzzle generate project NAME [path]");
+        }
+
+        PrefApp::Puzzle::Generator->new->projectStructure(@args);
+    }
+    else{
+        print PrefApp::Puzzle::Generator->new->template($type);
+    }
 }
 
 1;
