@@ -16,8 +16,8 @@ sub projectStructure :Sig(self, s){
 
         run
         compose
-        box_dev
-        box_prod
+        dev_box
+        prod_box
     ));
 }
 
