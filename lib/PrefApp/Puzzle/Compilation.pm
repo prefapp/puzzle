@@ -21,7 +21,7 @@ sub PATH_DB{
 }
 
 sub exists{
-    -d $_[0]->path;
+    -f $_[0]->PATH_DB;
 }
 
 sub getDB{
@@ -159,10 +159,11 @@ sub getServices{
 sub create{
     my ($self) = @_;
 
-    make_path($self->path) || $self->fatal(
-        "Could not create compilation path: " . $!
-    );
+   # make_path($self->path) || $self->fatal(
+   #     "Could not create compilation path: " . $!
+   # );
     
+    make_path($self->path) unless(-d $self->path);
 }
 
 sub createService{

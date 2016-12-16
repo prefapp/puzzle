@@ -50,11 +50,6 @@ sub initialize{
         PrefApp::Puzzle::DB->new()
     );
 
-    if(-e $self->compilationPath){
-
-        $self->f_compilationExists(1);
-
-    }
     
     $self->refCompilation(
 
@@ -64,6 +59,12 @@ sub initialize{
 
         )
     );
+
+    if($self->refCompilation->exists){
+
+        $self->f_compilationExists(1);
+
+    }
 
     $self;
 }

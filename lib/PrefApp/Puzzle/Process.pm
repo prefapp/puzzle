@@ -41,7 +41,13 @@ sub initialize{
 
     $self->SUPER::initialize(%args);
 
-    $self->__boot() unless($self->opts->{importing});
+    $self->__boot() unless(
+
+        $self->opts->{importing} ||
+
+        $self->opts->{generating} 
+
+    );
 }
     sub __boot{
         my ($self, %args) = @_;

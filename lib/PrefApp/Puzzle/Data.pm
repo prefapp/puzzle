@@ -10,7 +10,7 @@ has(
 sub loadPiece{
     my ($self, $piece) = @_;
 
-    $self->__loadConf($piece, 'exports');
+    $self->__loadConf($piece, 'overrides');
     
     $self->__loadConf($piece, 'related');
 }

@@ -10,6 +10,8 @@ use Getopt::Long;
 use PrefApp::Puzzle;
 use PrefApp::Puzzle::Process;
 
+use Cwd 'abs_path', 'cwd';
+
 my $HELP_COMMANDS = &Eixo::Base::Data::getDataBySections(__PACKAGE__);
 
 has(
@@ -44,9 +46,6 @@ sub run{
 
         $self->__parseOpts(
             'from=s@',
-            'save=s',
-            'box=s',
-            'source=s',
             'add=s',
             'rebuild',
             'help',
@@ -210,16 +209,33 @@ sub run{
 
         return $self->__printCommandHelp("generate") if($self->opts->{help});
 
+        $self->opts->{generating} = 1;
+
         return $self->__instantiateCommands->generate(
             @args
         );
     }
 
 sub __instantiateCommands{
-    
+
+    $_[0]->__setPath();
+
     PrefApp::Puzzle::Process->new(
         opts=>$_[0]->opts
     )
+}
+
+sub __setPath{
+    my ($self) = @_;
+
+    my $base_path = $self->opts->{path} || $ENV{PUZZLE_PROJECT_PATH} || abs_path(cwd());
+
+    $ENV{PUZZLE_SOURCE_PATH} = $base_path;
+            
+    $ENV{PUZZLE_COMPILATION_PATH} = $base_path . '/run';
+            
+    $ENV{PUZZLE_BOX} = $self->opts->{box} || 'dev_box';
+    
 }
 
 sub __parseOpts{
@@ -227,6 +243,10 @@ sub __parseOpts{
 
     my %opts;
     my %get_opts;
+
+    # we always establish a set of necessary options
+    push @opts, "path=s";
+    push @opts, "box=s";
 
     foreach(@opts){
 
@@ -275,7 +295,6 @@ Usage: puzzle reload (service1 service2...) [OPTIONS]
 
 Pulls images from a service or services and the up
 
-   --save           Save compilation to the specified location
    --from           Attachs a directory as the project working dir
    --only-build     Just creates the compilation
    --add            Use an addenda for the compilation
@@ -287,7 +306,6 @@ Usage: puzzle up (service1 service2...) [OPTIONS]
 
 Creates/recreates a set of puzzle services
 
-   --save           Save compilation to the specified location
    --from           Attachs a directory as the project working dir
    --only-build     Just creates the compilation
    --add            Use an addenda for the compilation

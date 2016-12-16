@@ -12,7 +12,7 @@ sub NEEDED_SECTIONS{
     qw(
         weight
         application_containers
-        exports
+        overrides
         origin
     )
 }
