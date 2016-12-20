@@ -344,11 +344,9 @@ Performs a ps over a list of services
 
 @@import
 
-Usage: puzzle import import_path 
+Usage: puzzle import import_path project_name <save_path>
 
 Imports an exported puzzle database to create a compilation
-
-    --save      Saves the compilation in the path established
 
 @@export
 
