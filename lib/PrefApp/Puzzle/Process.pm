@@ -331,26 +331,28 @@ sub exporter{
 }
 
 sub importPuzzle{
-    my ($self, $path) = @_;
+    my ($self, $import_path, $project_name, $save_path) = @_;
 
-    unless(-f $path){
-        $self->error("Puzzle file \'$path\' does not exist");
+    unless(-f $import_path){
+        $self->error("Puzzle file \'$import_path\' does not exist");
     }
+
+    unless($project_name){
+        $self->error("Puzzle import needs a project name");
+    }
+
+    $save_path = $save_path  || ".";
 
     $self->refEnv(
         PrefApp::Puzzle::Environment->new()
     ); 
-    
-    my $output = $self->opts->{save} || $self->refEnv->puzzle_compilation_path; 
 
-    if(-e $output){
-        $self->error("$output exists");
-    }   
+    $self->generate("project", $project_name, $save_path);
 
-    my $db = $self->exporter->importPuzzle($path);
+    my $db = $self->exporter->importPuzzle($import_path);
 
     my $compilation = PrefApp::Puzzle::Compilation->new(
-        path=>$output
+        path => join("/", $save_path, $project_name, "run")
     );
 
     $compilation->create;
@@ -360,6 +362,9 @@ sub importPuzzle{
         $compilation->createService($service);
     }
 
+    my $path = $save_path . '/' . $project_name;
+
+    `cd $path; puzzle up --only-build`;
 }
 
 sub generate{

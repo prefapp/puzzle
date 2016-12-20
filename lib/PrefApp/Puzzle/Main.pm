@@ -344,7 +344,7 @@ Performs a ps over a list of services
 
 @@import
 
-Usage: puzzle import path
+Usage: puzzle import import_path 
 
 Imports an exported puzzle database to create a compilation
 
