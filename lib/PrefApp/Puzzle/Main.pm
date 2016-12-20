@@ -234,7 +234,7 @@ sub __setPath{
             
     $ENV{PUZZLE_COMPILATION_PATH} = $base_path . '/run';
             
-    $ENV{PUZZLE_BOX} = $self->opts->{box} || 'dev_box';
+    $ENV{PUZZLE_BOX} = $self->opts->{box} || $ENV{PUZZLE_BOX} || 'dev_box';
     
 }
 
