@@ -18,6 +18,14 @@ has(
     dockerCommands=>undef,
 );
 
+sub getTasksForService :Sig(self, s){
+    my ($self, $service) = @_;
+
+    my $piece = $self->refVault->get($service . '_piece');
+
+    return [keys(%{$piece->tasks})];
+}
+
 sub runTaskForService :Sig(self, s, s){
     my ($self, $task, $service) = @_;
 

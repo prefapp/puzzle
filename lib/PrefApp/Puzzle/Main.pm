@@ -321,6 +321,9 @@ Run <task_name> in a new service <service> container
    --arg            Argument to pass to task (can be declared multiple times)
    --help           Prints this help
 
+If a <task_name> is not passed to the command a list of the tasks for the service are printed instead.
+
+
 @@info
 
 Usage: puzzle info (service1 service2 ...) [OPTIONS]

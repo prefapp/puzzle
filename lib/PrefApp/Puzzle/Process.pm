@@ -238,6 +238,23 @@ sub task{
     $self->eventCommands->runTaskForService($task, $service);
 }
 
+sub taskList{
+    my ($self, $service) = @_;
+
+    unless($self->refCompilation->exists){
+        $self->error("There is no working compilation");
+    }
+
+    unless($self->compilationCommands->isServiceInstalled($service)){
+        $self->error("Service $service is not installed");
+    }
+
+    my $tasks = $self->eventCommands->getTasksForService($service);
+
+    print "Tasks for $service:\n";
+    print "  - $_\n" foreach(@$tasks);
+}
+
 sub export{
     my ($self) = @_;
 
