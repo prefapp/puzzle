@@ -6,6 +6,7 @@ lib/PrefApp/Puzzle/Addenda.pm
 lib/PrefApp/Puzzle/AttributeFinder.pm
 lib/PrefApp/Puzzle/Base.pm
 lib/PrefApp/Puzzle/Boot.pm
+lib/PrefApp/Puzzle/CommandRunner.pm
 lib/PrefApp/Puzzle/Compilation.pm
 lib/PrefApp/Puzzle/CompilationCommands.pm
 lib/PrefApp/Puzzle/CompilationInfo.pm
@@ -21,6 +22,7 @@ lib/PrefApp/Puzzle/EnvCompilation.pm
 lib/PrefApp/Puzzle/Environment.pm
 lib/PrefApp/Puzzle/EventCommands.pm
 lib/PrefApp/Puzzle/Exporter.pm
+lib/PrefApp/Puzzle/Generator.pm
 lib/PrefApp/Puzzle/Images.pm
 lib/PrefApp/Puzzle/InfoCommands.pm
 lib/PrefApp/Puzzle/Loader.pm
