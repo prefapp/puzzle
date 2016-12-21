@@ -87,10 +87,10 @@ sub run{
         );
     }
 
-    sub command_reload{
+    sub command_update{
         my ($self, @args) = @_;
 
-        $self->{command} = "reload";
+        $self->{command} = "update";
 
         $self->command_up(@args);
     }
@@ -289,9 +289,9 @@ sub __printCommandHelp{
 
 __DATA__
 
-@@reload
+@@update
 
-Usage: puzzle reload (service1 service2...) [OPTIONS]
+Usage: puzzle update(service1 service2...) [OPTIONS]
 
 Pulls images from a service or services and the up
 

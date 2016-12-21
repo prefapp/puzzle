@@ -70,7 +70,7 @@ sub initialize{
         $self->eventCommands($boot->eventCommands);
     }
 
-sub reload{
+sub update{
     my ($self, @services) = @_;
 
     @services = $self->__getValidServicesOrAll(@services);
