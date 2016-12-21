@@ -216,6 +216,23 @@ sub run{
         );
     }
 
+    sub command_run{
+        my ($self, $where, @args) = @_;
+
+        $self->__parseOpts(
+            "help"
+        );
+
+        return $self->__printCommandHelp("generate") if($self->opts->{help});
+
+        return $self->__instantiateCommands->run(
+
+            $where,
+
+            @args
+        );
+    }
+
 sub __instantiateCommands{
 
     $_[0]->__setPath();
@@ -367,3 +384,11 @@ Creates templates for different purposes
 
     piece     Creates a piece's template
     project   Creates a structure for a project
+
+@@run
+
+Usage: puzzle run <service>:<container> command [args]
+
+Run a command in a container whithin a service
+
+

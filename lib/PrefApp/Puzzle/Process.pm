@@ -11,6 +11,8 @@ use PrefApp::Puzzle::Compilation;
 
 use PrefApp::Puzzle::Generator;
 
+use PrefApp::Puzzle::CommandRunner;
+
 has(
 
     refVault=>undef,
@@ -295,6 +297,26 @@ sub infoPuzzle{
     $self->infoCommands->infoService($_) foreach(@services);
 }
 
+#
+# Run a command in a container
+#
+sub run{
+    my ($self, $where, @command) = @_;
+
+    unless($where =~ /(\w+)\:(\w+)/){
+        $self->error("Syntax error: <service>:<container>");
+    }
+
+    my ($service, $container) = ($1, $2);
+
+    PrefApp::Puzzle::CommandRunner->new(
+
+        service=>$service,
+
+        dockerCommands=>$self->dockerCommands,
+
+    )->runCommand($container, @command);
+}
 
 sub __getValidServicesOrAll{
     my ($self, @services) = @_;
