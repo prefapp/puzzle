@@ -8,7 +8,7 @@ my $TEMPLATES = &Eixo::Base::Data::getDataBySections(__PACKAGE__);
 sub projectStructure :Sig(self, s){
     my ($self, $project, $path) = @_;
 
-    $path = $path || $ENV{HOME};
+    $path = $path || ".";
 
     $self->__mkdir($path . '/' . $project, 'die-if-exists');
     
