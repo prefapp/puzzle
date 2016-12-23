@@ -207,7 +207,9 @@ sub run{
             "help"
         );
 
-        return $self->__printCommandHelp("generate") if($self->opts->{help});
+        return $self->__printCommandHelp("generate") if($self->opts->{help} && @args == 1);
+
+        return $self->__printCommandHelp("generate_piece") if($self->opts->{help} && $args[0] eq 'piece');
 
         $self->opts->{generating} = 1;
 
@@ -384,6 +386,12 @@ Creates templates for different purposes
 
     piece     Creates a piece's template
     project   Creates a structure for a project
+
+@@generate_piece
+
+Usage: puzzle generate piece [box] [piece_name]
+
+Creates a template for a piece
 
 @@run
 

@@ -420,8 +420,37 @@ sub generate{
 
         PrefApp::Puzzle::Generator->new->projectStructure(@args);
     }
-    else{
-        print PrefApp::Puzzle::Generator->new->template($type);
+    elsif($type eq 'piece'){
+
+        my ($box, $name) = @args;
+
+        my $piece = PrefApp::Puzzle::Generator->new->template($type);
+
+        if(!$box){
+            print $piece;
+        }
+        else{
+        
+            if(!$name){
+                $self->error("puzzle generate piece BOX PIECE_NAME");
+            }
+    
+            my $path = $ENV{PUZZLE_SOURCE_PATH} . "/" . $box;
+
+            unless(-d $path){
+                $self->error("Box $box does not exist");
+            }
+
+            $path .= "/" .$name;
+
+            $path .= ".yml" unless($path =~ /\.yml$/);
+
+            open(F, ">", $path) || $self->error("I/O error in $path: $!");
+
+            print F $piece;
+
+            close F;
+        }
     }
 }
 
