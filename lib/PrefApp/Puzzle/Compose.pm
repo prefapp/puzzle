@@ -11,7 +11,8 @@ has(
 
     data=>{},
 
-    constructions=>{}
+    constructions=>{},
+
 );
 
 sub FREEZE_KEYS{

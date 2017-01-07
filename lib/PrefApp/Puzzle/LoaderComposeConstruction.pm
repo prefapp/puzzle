@@ -42,7 +42,6 @@ sub __load{
         my $file = $construction->data->{extends}->{file};
         my $as = $construction->data->{extends}->{service};
 
-      
         $file = $relativePath . "/" . $file if($relativePath);
         
         return ($self->loader(

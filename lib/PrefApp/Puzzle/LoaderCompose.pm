@@ -8,18 +8,33 @@ use PrefApp::Puzzle::Compose;
 
 use PrefApp::Puzzle::YAML;
 
+use PrefApp::Puzzle::LoaderComposeV1;
+use PrefApp::Puzzle::LoaderComposeV2;
+
 sub COMPOSE_CLASS{
     "PrefApp::Puzzle::Compose";
 }
 
+sub COMPOSE_LOADER_V1{
+    "PrefApp::Puzzle::LoaderComposeV1";
+}
+
+sub COMPOSE_LOADER_V2{
+    "PrefApp::Puzzle::LoaderComposeV2";
+}
 
 sub __load{
     my ($self, $service, $name, %args) = @_;
 
     # first we load the file of the piece
     my $data;
+
     eval{
+
         $data  = $self->__loadComposeData($name);
+
+        $self->__adaptarComposeAVersion($data);
+
     };
     if($@){
         $self->fatal("Loading compose $name : " . $@);
@@ -47,8 +62,28 @@ sub __load{
 
     );
 
+    # We load additional keys (if necessary)
+    if($self->can("__loadAdditionalArtifacts")){
+        $self->__loadAdditionalArtifacts($compose, $data);
+    }
+
     return $compose;
 }
+
+    sub __adaptarComposeAVersion{
+        my ($self, $data) = @_;
+
+        unless($data->{version}){
+            return bless($self, $self->COMPOSE_LOADER_V1);
+        }
+        
+        if($data->{version} eq '2'){
+            return bless($self, $self->COMPOSE_LOADER_V2);
+        }
+        else{
+            $self->fatal("UNSUPPORTED DOCKER_COMPOSE VERSION " . $data->{version});
+        }
+    }
 
     sub __loadComposeData{
         my ($self, $name) = @_;
@@ -74,37 +109,6 @@ sub __load{
 
         )
     
-    }
-
-    sub __loadConstructions{
-        my ($self, $compose, $path) = @_;
-
-        my ($f, $relativePath) = fileparse($path);
-
-        my %constructions = map {
-
-            $_ => $self->loader(
-
-                $self->LOADER_COMPOSE_CONSTRUCTION_CLASS,
-
-
-            )->load(
-
-                $_,
-
-                $compose->service,
-
-                referer=>$compose->alias,
-
-                data=>$compose->data->{$_},
-
-                path=>$relativePath
-            )
-            
-
-        } keys(%{$compose->data});
-
-        \%constructions
     }
 
 1;

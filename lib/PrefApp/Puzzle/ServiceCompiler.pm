@@ -8,8 +8,8 @@ use Hash::Merge;
 use List::MoreUtils qw(uniq);  
 use File::Basename qw(basename);
 
-use Hash::Merge;
-use PrefApp::Puzzle::AttributeFinder;
+use PrefApp::Puzzle::ComposeWriterV1;
+use PrefApp::Puzzle::ComposeWriterV2;
 
 has(
 
@@ -57,124 +57,41 @@ sub compile{
         "Piece " . $piece->alias. " is without compose"
     );
 
-    # let's compile every construction
-    $self->__compileConstruction($_, $compose->constructions->{$_}, $piece) 
-        foreach(keys(%{$compose->constructions}));   
+    my $compose_writer = $self->__getComposeWriterClass(
+
+        $piece->composeVersion
+    );
+
+    my $docker_compose = $compose_writer
+
+        ->new(
+
+            %{$self}
+
+        )->write($compose, $piece);
+
 
     # lets create the service structure
     $self->refCompilation->createService(
 
         $service,
 
-        "docker-compose.yml" => PrefApp::Puzzle::YAML::Dump($self->compose_data),
+        "docker-compose.yml" => $docker_compose,
 
         $self->__dependencies($compose)
 
     );
 }
 
-    sub __compileConstruction{
-        my ($self, $construction_name, $construction, $piece) = @_;
+    sub __getComposeWriterClass{
+        my ($self, $compose_version) = @_;
 
-        my $data = $construction->data;
-
-        $data->{environment} ||= {};
-
-        # let's merge db relations in the environment
-        $data->{environment} = Hash::Merge
-
-            ->new('RIGHT_PRECEDENT')
-
-            ->merge(
-
-                $data->{environment},
-
-                $self->refDB->getSection($piece->service, $construction_name) || {}
-            );
-
-        # a project volume is needed?   
-        if(my $from = $self->args->{from}){
-
-            if(grep {$_ eq $construction_name} @{$piece->getApplicationContainers}){
-
-                # We need a mount point
-                if(my $mount_point = $self->__find($construction_name . '.working_dir', $piece)){
-
-                    # is already mounted?
-                    if($construction->from_mounted && $construction->from_mounted ne $from){
-
-                        $self->__umountVolume(
-
-                            $construction, 
-
-                            $construction->from_mounted . ':' . $mount_point
-
-                        );
-                    }
-
-                    unless($construction->from_mounted && $construction->from_mounted eq $from){
-
-                     $self->__mountVolume(
-
-                         $construction, 
-
-                         $from . ':' . $mount_point
-
-                     );
-
-                    }
-
-                    $construction->from_mounted($from);
-                }
-                else{
-                    $self->error("Construction $construction_name has not established a working_dir, ".
-                    
-                        "a project volume cannot be defined"
-                    );
-                }
-            }
-    
+        if($compose_version eq 'V2'){
+           return "PrefApp::Puzzle::ComposeWriterV2"
         }
-        
-
-        # we copy the section
-        $self->compose_data->{$construction_name} = $data;
-    }
-
-    sub __mountVolume{
-        my ($self, $construction, $volume) = @_;
-        
-        $construction->data->{volumes} ||= [];
-
-        push @{$construction->data->{volumes}}, $volume;
-    }
-
-    sub __umountVolume{
-        my ($self, $construction, $volume) = @_;
-
-        $construction->data->{volumes} = [grep {
-
-            $_ ne $volume
-
-        } @{$construction->data->{volumes}}];
-    }
-
-    sub __find{
-
-        PrefApp::Puzzle::AttributeFinder->new->find(
-
-            $_[1], $_[2]
-
-        )
-    }
-
-    sub __exportArgs{
-        JSON::XS->new->encode($_[0]->args)
-    }
-
-    sub __exportEnv{
-        my ($self, $env) = @_;
-        JSON::XS->new->encode($env || \%ENV)
+        else{
+           return "PrefApp::Puzzle::ComposeWriterV1"
+        }
     }
 
     sub __dependencies{
@@ -193,4 +110,5 @@ sub compile{
 
     }
 
+1;
 1;

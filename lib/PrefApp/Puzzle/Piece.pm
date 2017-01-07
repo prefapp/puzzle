@@ -78,5 +78,14 @@ sub eventFired:Sig(self, s){
     } @$tasks
 }
 
+sub composeVersion{
+
+    if(ref($_[0]->compose) =~ /V2/){
+        return "V2";
+    }
+    else{
+        return "V1";
+    }
+}
 
 1;
