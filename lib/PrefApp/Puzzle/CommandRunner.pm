@@ -28,7 +28,7 @@ sub initialize{
     $self;
 }
 
-sub runCommand :Sig(self, s) {
+sub runCommand :Sig(self, s){
     my ($self, $container, @command) = @_;
 
     eval{

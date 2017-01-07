@@ -219,17 +219,19 @@ sub run{
     }
 
     sub command_run{
-        my ($self, $where, @args) = @_;
+        my ($self, $service, $container, @args) = @_;
 
         $self->__parseOpts(
             "help"
         );
 
-        return $self->__printCommandHelp("generate") if($self->opts->{help});
+        return $self->__printCommandHelp("run") if($self->opts->{help});
 
         return $self->__instantiateCommands->run(
 
-            $where,
+            $service,
+
+            $container,
 
             @args
         );
@@ -395,7 +397,7 @@ Creates a template for a piece
 
 @@run
 
-Usage: puzzle run <service>:<container> command [args]
+Usage: puzzle run service container command [args]
 
 Run a command in a container whithin a service
 

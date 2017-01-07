@@ -301,13 +301,7 @@ sub infoPuzzle{
 # Run a command in a container
 #
 sub run{
-    my ($self, $where, @command) = @_;
-
-    unless($where =~ /(\w+)\:(\w+)/){
-        $self->error("Syntax error: <service>:<container>");
-    }
-
-    my ($service, $container) = ($1, $2);
+    my ($self, $service, $container, @command) = @_;
 
     PrefApp::Puzzle::CommandRunner->new(
 
