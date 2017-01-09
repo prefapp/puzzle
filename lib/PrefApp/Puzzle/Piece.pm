@@ -45,7 +45,7 @@ sub origin{
 }
 
 sub exports{
-    $_[0]->data->{overrides} || {};
+    $_[0]->data->{overrides} || $_[0]->data->{exports} || {};
 }
 
 sub related{
