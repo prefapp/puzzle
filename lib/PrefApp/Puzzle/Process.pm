@@ -128,6 +128,18 @@ sub up{
 
             $self->dockerCommands->upService($service);
 
+            unless($f_in_recompilation){
+
+                $self->eventCommands->fireEventForService(
+
+                    "on_up",
+
+                    $service
+
+                );
+
+            }
+
         } 
     }
 
