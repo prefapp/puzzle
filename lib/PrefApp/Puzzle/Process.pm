@@ -302,16 +302,29 @@ sub start{
         $self->error("There is no working compilation");
     }
 
+    @services = $self->__getValidServicesOrAll(@services);
     my (%services) = $self->__splitInstalledServicesAndContainers(@services);
 
-    foreach my $service (keys(%services)){
+    my @errors; 
 
-        if($services{$service} eq 'all'){
-            $self->dockerCommands->startService($service);
+    foreach my $service (@services){
+
+        eval{
+
+            if($services{$service} eq 'all'){
+                $self->dockerCommands->startService($service);
+            }
+            else{
+                $self->dockerCommands->startServiceContainers($service, @{$services{$service}})
+            }
+        };
+        if($@){
+            push @errors, $@;
         }
-        else{
-            $self->dockerCommands->startServiceContainers($service, @{$services{$service}})
-        }
+    }
+
+    if(@errors){
+        $self->error(join("\n", @errors));
     }
 }
 
@@ -322,16 +335,31 @@ sub stop{
         $self->error("There is no working compilation");
     }
 
-    my (%services) = $self->__splitInstalledServicesAndContainers(@services);
+    @services = $self->__getValidServicesOrAll(@services);
 
-    foreach my $service (keys(%services)){
+    my (%services) = $self->__splitInstalledServicesAndContainers(
+        $self->__getValidServicesOrAll(@services)
+    );
 
-        if($services{$service} eq 'all'){
-            $self->dockerCommands->stopService($service);
+    my @errors;
+
+    foreach my $service (reverse @services){
+
+        eval{
+            if($services{$service} eq 'all'){
+                $self->dockerCommands->stopService($service);
+            }
+            else{
+                $self->dockerCommands->stopServiceContainers($service, @{$services{$service}})
+            }
+        };
+        if($@){
+            push @errors, $@;
         }
-        else{
-            $self->dockerCommands->stopServiceContainers($service, @{$services{$service}})
-        }
+    }
+
+    if(@errors){
+        $self->error(join("\n", @errors));
     }
 }
 

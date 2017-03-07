@@ -235,6 +235,7 @@ sub run{
 
             @args
         );
+    }
 
     sub command_start{
         my ($self,@services) = @_;

@@ -61,9 +61,9 @@ sub stopService{
 
     $self->info("Stopping service $service");
 
-    $self->__dockerForService($service)->stop($service);
+    $self->__dockerForService($service)->stop();
 
-    $self->info("Service $service stopped");
+    $self->info("Service $service stopped\n");
 }
 
 sub startService{
@@ -73,7 +73,7 @@ sub startService{
 
     $self->__dockerForService($service)->start();
 
-    $self->info("Service $service started");
+    $self->info("Service $service started\n");
 }
 
 sub startServiceContainers{
