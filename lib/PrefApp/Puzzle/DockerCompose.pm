@@ -80,6 +80,25 @@ sub stop{
     );
 }
 
+sub start{
+    my ($self, @containers) = @_;
+
+    $self->execSalida(
+
+        $self->DOCKER_COMPOSE,
+
+        "-f",
+
+        $self->{path},
+
+        "start",
+
+        @containers
+
+    );
+
+}
+
 sub ps{
     my ($self) = @_;
 

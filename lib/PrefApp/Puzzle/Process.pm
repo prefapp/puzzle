@@ -295,6 +295,98 @@ sub export{
     $self->exporter->exportPuzzle($path);
 }
 
+sub start{
+    my ($self, @services) = @_;
+
+    unless($self->refCompilation->exists){
+        $self->error("There is no working compilation");
+    }
+
+    @services = $self->__getValidServicesOrAll(@services);
+    my (%services) = $self->__splitInstalledServicesAndContainers(@services);
+
+    my @errors; 
+
+    foreach my $service (@services){
+
+        eval{
+
+            if($services{$service} eq 'all'){
+                $self->dockerCommands->startService($service);
+            }
+            else{
+                $self->dockerCommands->startServiceContainers($service, @{$services{$service}})
+            }
+        };
+        if($@){
+            push @errors, $@;
+        }
+    }
+
+    if(@errors){
+        $self->error(join("\n", @errors));
+    }
+}
+
+sub stop{
+    my ($self, @services) = @_;
+
+    unless($self->refCompilation->exists){
+        $self->error("There is no working compilation");
+    }
+
+    @services = $self->__getValidServicesOrAll(@services);
+
+    my (%services) = $self->__splitInstalledServicesAndContainers(
+        $self->__getValidServicesOrAll(@services)
+    );
+
+    my @errors;
+
+    foreach my $service (reverse @services){
+
+        eval{
+            if($services{$service} eq 'all'){
+                $self->dockerCommands->stopService($service);
+            }
+            else{
+                $self->dockerCommands->stopServiceContainers($service, @{$services{$service}})
+            }
+        };
+        if($@){
+            push @errors, $@;
+        }
+    }
+
+    if(@errors){
+        $self->error(join("\n", @errors));
+    }
+}
+
+    sub __splitInstalledServicesAndContainers{
+        my ($self, @services) = @_;
+
+        my (%services) = map {
+
+            my ($service, $containers) = split(/\:/, $_);
+
+            ($containers) ? 
+
+                ($service => [split(/\,/, $containers)]) :
+
+                ($service => "all")
+
+        } grep {
+
+            my ($service) = $_ =~ /^(\w+)\:?/;
+
+            $self->compilationCommands->isServiceInstalled($service)
+
+        } @services;
+
+        return %services;
+    }
+
 sub infoPuzzle{
     my ($self, @services) = @_;
 
