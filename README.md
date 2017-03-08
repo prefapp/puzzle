@@ -3,18 +3,33 @@ puzzle
 
 Puzzle is a tool to create environments with docker and docker-compose
 
-##To start using it
+## To start using it
+
+### Installation
+```
+curl -L https://github.com/prefapp/puzzle/releases/download/v2.0.1/puzzle-2.0.1.tar.gz \
+| tar xzC /usr/local/bin/ puzzle && chmod 755 /usr/local/bin/puzzle
+```
+
+### puzzle commands
 
 ```
 Usage: puzzle COMMAND [arg...]
 
 Commands:
 
-    up      Launches one or more puzzle services
-    down    Stops and deletes installed puzzle services
-    ps      Information about installed puzzle services
-    task    Runs a bunch of jobs in a service 
-    
+    up          Launches one or more puzzle services
+    down        Stops and deletes installed puzzle services
+    ps          Information about installed puzzle services
+    task        Runs a bunch of jobs in a service 
+    reload      Pull images and up of one or more puzzle services
+    import      Imports a puzzle compilation into the local filesystem
+    export      Exports a puzzle compilation in a portable format
+    generate    Generate templates and files
+
+
+
+Usage: puzzle COMMAND [arg...]    
 ```
 
 ### puzzle up <service list> <options>
