@@ -107,6 +107,8 @@ To use an addenda when you are creating a new environment:
 
 ##DEPENDENCIES
 
+If you prefer not to use the binary, and install the module on your own, you must know:
+
 This module requires these other modules and libraries:
 
 ```perl
