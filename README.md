@@ -7,7 +7,7 @@ Puzzle is a tool to create environments with docker and docker-compose
 
 ### Installation
 ```
-curl -L https://github.com/prefapp/puzzle/releases/download/v2.0.1/puzzle-2.0.1.tar.gz \
+curl -L https://github.com/prefapp/puzzle/releases/download/v2.0.2/puzzle-2.0.2.tar.gz \
 | tar xzC /usr/local/bin/ puzzle && chmod 755 /usr/local/bin/puzzle
 ```
 
