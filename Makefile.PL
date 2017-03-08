@@ -5,7 +5,15 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
     NAME              => 'PrefApp::Puzzle',
     VERSION_FROM      => 'lib/PrefApp/Puzzle.pm', # finds $VERSION, requires EU::MM from perl >= 5.5
-    PREREQ_PM         => {}, # e.g., Module::Name => 1.1
+    PREREQ_PM         => {
+        'Eixo::Base' => '1.500',
+        'JSON::XS' => '3.02',
+        'YAML::Syck' => '1.29',
+        'List::MoreUtils' => '0.41',
+        'Hash::Merge' => '0.20' ,
+        'Getopt::Long' => '2.49'
+    
+    }, # e.g., Module::Name => 1.1
     ABSTRACT_FROM     => 'lib/PrefApp/Puzzle.pm', # retrieve abstract from module
     AUTHOR            => 'root <root@>',
     EXE_FILES           => ["bin/puzzle"],
