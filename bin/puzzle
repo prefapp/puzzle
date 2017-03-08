@@ -36,6 +36,8 @@ Commands:
 
     up          Launches one or more puzzle services
     down        Stops and deletes installed puzzle services
+    stop        Stops installed puzzle services
+    start       Starts installed puzzle services
     ps          Information about installed puzzle services
     task        Runs a bunch of jobs in a service 
     reload      Pull images and up of one or more puzzle services

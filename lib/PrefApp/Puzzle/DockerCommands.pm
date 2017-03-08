@@ -61,9 +61,43 @@ sub stopService{
 
     $self->info("Stopping service $service");
 
-    $self->__dockerForService($service)->stop($service);
+    $self->__dockerForService($service)->stop();
 
-    $self->info("Service $service stopped");
+    $self->info("Service $service stopped\n");
+}
+
+sub startService{
+    my ($self, $service) = @_;
+
+    $self->info("Starting service $service");
+
+    $self->__dockerForService($service)->start();
+
+    $self->info("Service $service started\n");
+}
+
+sub startServiceContainers{
+    my ($self, $service, @containers) = @_;
+
+    $self->error("NOT IMPLEMENTED YET");
+
+    #$self->info("Starting service $service". '\'s (' . join(',', @containers) . ")");
+
+    #$self->__dockerForService($service)->start($service, @containers);
+
+    #$self->info("Service $service\'s containers started");
+}
+
+sub stopServiceContainers{
+    my ($self, $service, @containers) = @_;
+
+    $self->error("NOT IMPLEMENTED YET");
+
+    #$self->info("Stopping service $service". '\'s (' . join(',', @containers) . ")");
+
+    #$self->__dockerForService($service)->stop($service, @containers);
+
+    #$self->info("Service $service\'s containers stopped");
 }
 
 sub __dockerForService{
