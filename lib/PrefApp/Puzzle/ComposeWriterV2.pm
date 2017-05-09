@@ -3,6 +3,18 @@ package PrefApp::Puzzle::ComposeWriterV2;
 use strict;
 use Eixo::Base::Clase "PrefApp::Puzzle::ComposeWriterV1";
 
+use PrefApp::Puzzle::merger::ComposerMergerV2;
+
+sub merge{
+
+    PrefApp::Puzzle::merger::ComposerMergerV2->new(
+
+        composer=>$_[0]
+
+    )->merge();    
+
+}
+
 sub write{
 
     my $docker_compose = $_[0]->SUPER::write(@_[1..$#_]);

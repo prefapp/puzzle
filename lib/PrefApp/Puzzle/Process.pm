@@ -295,6 +295,31 @@ sub export{
     $self->exporter->exportPuzzle($path);
 }
 
+sub export_compose{
+    my ($self, $save_path) = @_;
+
+    unless($self->refCompilation->exists){
+        $self->error("There is no working compilation");
+    }
+
+    #
+    # We compile and merge all the services
+    #
+    my $compose = $self->compilationCommands->compileAndMerge(
+        $self->__servicesList
+    ); 
+
+    if($save_path){
+        open (F, '>' . $save_path) ||
+            $self->error("Could not open $save_path for writing: $!");
+        print F $compose;
+        close F;
+    }
+    else{
+        print $compose, "\n";
+    }
+}
+
 sub start{
     my ($self, @services) = @_;
 

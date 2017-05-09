@@ -19,6 +19,8 @@ has(
 
     refCompilation=>undef,
 
+    refComposeWriter=>undef,
+
     args=>{},
 
     compose_data=>{},
@@ -62,14 +64,25 @@ sub compile{
         $piece->composeVersion
     );
 
-    my $docker_compose = $compose_writer
+    my $compose_writer_instance = $compose_writer->new(
 
-        ->new(
+            %{$self},
 
-            %{$self}
+            pieceRef=>$piece
 
-        )->write($compose, $piece);
+        );
 
+    my $docker_compose = $compose_writer->write(
+
+        $compose, 
+
+        $piece
+
+    );
+
+    $self->refComposeWriter($compose_writer_instance);
+
+    return $self if($args{'--only-compile'});
 
     # lets create the service structure
     $self->refCompilation->createService(
@@ -81,6 +94,8 @@ sub compile{
         $self->__dependencies($compose)
 
     );
+
+    return $self;
 }
 
     sub __getComposeWriterClass{
@@ -110,5 +125,4 @@ sub compile{
 
     }
 
-1;
 1;

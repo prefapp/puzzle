@@ -17,6 +17,7 @@ has(
 
     args=>{},
 
+    pieceRef=>undef,
 );
 
 sub write{

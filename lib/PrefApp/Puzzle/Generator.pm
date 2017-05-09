@@ -3,6 +3,8 @@ package PrefApp::Puzzle::Generator;
 use strict;
 use Eixo::Base::Clase 'PrefApp::Puzzle::Base';
 
+use Eixo::Base::Data;
+
 my $TEMPLATES = &Eixo::Base::Data::getDataBySections(__PACKAGE__);
 
 sub projectStructure :Sig(self, s){

@@ -110,6 +110,20 @@ sub run{
         );
     }
 
+    sub command_export_compose{
+        my ($self, @args) = @_;
+
+        $self->__parseOpts(qw(
+            help
+        ));
+
+        return $self->__printCommandHelp("export_compose") if($self->opts->{help});
+
+        $self->__instantiateCommands->export_compose(
+            @args
+        );
+    }
+
     sub command_import{
         my ($self, @args) = @_;
 
@@ -427,6 +441,12 @@ Usage: puzzle export
 Exports a compilation to a puzzle database (defaults to ./compilation.puzzle)
 
     --out       Saves the exported database in the path/name specified
+
+@@export_compose
+
+Usage: puzzle export_compose [save_path]
+
+Exports a compilation to a single docker-compose file 
 
 @@generate
 

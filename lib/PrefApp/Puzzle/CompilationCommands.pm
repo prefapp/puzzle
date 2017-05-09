@@ -4,6 +4,7 @@ use strict;
 use Eixo::Base::Clase 'PrefApp::Puzzle::Base';
 
 use PrefApp::Puzzle::ServiceCompiler;
+use PrefApp::Puzzle::merger::ComposeMerger;
 
 has(
 
@@ -99,7 +100,7 @@ sub recompileServices{
 }
 
 sub compileServices{
-    my ($self, $services, $services_dependencies) = @_;
+    my ($self, $services, $services_dependencies, %args) = @_;
 
     my @services = @$services;
 
@@ -116,9 +117,50 @@ sub compileServices{
     $self->__loadAddenda;
 
     # now we instantiate the service compiler with service compiling options
+
+    my @services_compilers;
+
     foreach(@services){
-        $self->__getServiceCompiler($_)->compile($_);
+        my $compiler = $self->__getServiceCompiler($_)->compile($_, %{$args{"--compiler_args"} || {}});
+
+        if($args{"--return-compilers"}){
+            push @services_compilers, $compiler->refComposeWriter;
+        }
     }
+
+    return @services_compilers if($args{"--return-compilers"});
+}
+
+sub compileAndMerge{
+    my ($self, @services) = @_;
+
+    my @services_compilers = $self->compileServices(
+
+        \@services, 
+    
+        undef, 
+
+        "--return-compilers" => 1,
+
+        "--compiler_args" => {
+
+            "--only-compile" => 1
+        }
+    );
+
+    my $merger = PrefApp::Puzzle::merger::ComposeMerger->new;
+
+    foreach(@services_compilers){
+
+        $merger->addMergedPart(
+
+            $_->merge
+
+        );
+    }
+
+    return $merger->write;
+    
 }
 
     sub __loadPieceToService :Sig(self, s,s){

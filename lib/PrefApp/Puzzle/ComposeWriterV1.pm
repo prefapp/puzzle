@@ -5,6 +5,10 @@ use Eixo::Base::Clase "PrefApp::Puzzle::ComposeWriter";
 
 use Hash::Merge;
 
+sub merge{
+    $_[0]->error("Compose V1 pieces are not mergeable");
+}
+
 sub __compileConstruction{
     my ($self, $construction_name, $construction, $piece) = @_;
 
